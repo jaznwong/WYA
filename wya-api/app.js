@@ -1,14 +1,29 @@
-const bodyParser = require('body-parser');
-const express = require('express');
-const models = require('./models');
+const bodyParser = require('body-parser')
+const express = require('express')
+const models = require('./models')
+const passport = require('passport')
+const cookieParser = require('cookie-parser')
+const session = require('express-session')
 
 const PORT = process.env.PORT || 8000;
 
 const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+app.use(cookieParser())
 
+// Setting up passport
+app.use(session({
+  secret: "super-secret-keyword-that-should-be-in-env-file",
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+
+// Run local strategy passport configs
+require('./config/passport')(passport)
 
 // Uncomment the following if you want to serve up static assets.
 // (You must create the public folder)
