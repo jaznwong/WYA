@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {searchRooms} from '../store/actions'
+import {searchRooms} from '../../store/actions'
 
 class SearchForm extends Component{
     handleSearch(event){
