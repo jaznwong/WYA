@@ -15,7 +15,7 @@ export function searchRooms(query){
         let url = apiRoute + "rooms/" + query;
         return fetch(url)
             .then(res => res.json())
-            .then(rooms => dispatch(searchRoomsAction(rooms)))
+            .then(rooms => dispatch(searchRoomsAction(rooms.roomList)))
             .catch(err => console.log("Error in fetching searchRooms"))
     }
 }
