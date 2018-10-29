@@ -4,7 +4,7 @@ const models = require('./models')
 const passport = require('passport')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
-
+const errorHandler = require('./handlers/error')
 const PORT = process.env.PORT || 8000;
 
 const app = express();
@@ -48,7 +48,7 @@ app.set('views', `${__dirname}/views/`);
 // Load up all of the controllers
 const controllers = require('./controllers');
 app.use(controllers)
-
+app.use(errorHandler)
 
 // First, make sure the Database tables and models are in sync
 // then, start up the server and start listening.
