@@ -13,14 +13,14 @@ class App extends Component {
                 <div className="container">
                     <Switch>
                         <Route exact path='/' component={Dashboard} />
-                        <Route path='/register' render={props=>(
+                        <Route path='/signup' render={props=>(
                             <AuthForm {...props} 
                                 signup={true} 
                                 buttonText={"Signup"}
                                 header={"Join in with all the Fun!"}
                                 />
                         )} />
-                        <Route path='/signin' render={props=>(
+                        <Route path='/login' render={props=>(
                             <AuthForm {...props} 
                                 signup={false} 
                                 buttonText={"Signin"}
