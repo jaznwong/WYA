@@ -1,7 +1,11 @@
-import {SEARCH_ROOMS} from './actions'
+import {SEARCH_ROOMS, AUTH_USER} from './actions'
 
 const initialState = {
-    searchedRooms: []
+    searchedRooms: [],
+    user: {
+        isAuthenticated: false,
+        userData: {}
+    }
 }
 
 export default function rootReducer(state=initialState, action){
@@ -10,6 +14,15 @@ export default function rootReducer(state=initialState, action){
             return{
                 ...state,
                 searchedRooms: action.searchedRooms
+            }
+        case AUTH_USER:
+            // TODO: authenticate based on other weather if userData is empty or not
+            return{
+                ...state,
+                user: {
+                    isAuthenticated: Object.keys(action.userData).length > 0,
+                    userData: action.userData
+                }
             }
         default:
             return state
