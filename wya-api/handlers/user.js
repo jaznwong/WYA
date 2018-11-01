@@ -1,72 +1,86 @@
-let {Users} = require('../models')
+let {
+    User
+} = require('../models');
 
-let getUserById = async function(id){
-    try{
-        return await Users.findById(id)
-    }catch(err){
-        throw `Could not find userID ${id}`
-    }
-}
-
-let findOneByUsername = async function(username){
-    return Users.findOne({where:{username}})
-}
-
-let register = async function (req, res, next) {
+/**
+ * Find an user on the database
+ * @param {*} id - user id
+ */
+let findById = async function (id) {
     try {
-        let user = await Users.create(req.body);
-        return res.status(200).json(user);
+        return await User.findById(id);
+    } catch (err) {
+        throw `Could not find userID ${id}`;
     }
-    catch (err) {
-        // TODO: Handle error code duplicate User and send back message duplicate user
-        next({
-            status: 400,
-            message: `Unable to register user`
+};
+
+/**
+ * Returns all users in the database
+ */
+let getAll = async function () {
+    try {
+        let allUsers = await User.findAll();
+        return allUsers;
+    } catch (err) {
+        console.log("error is: " + err)
+        throw `unable to retrieve all users`
+    }
+};
+
+/**
+ * Creates an user on the database
+ * @param {*} params - key value pair mirroring user model
+ */
+let create = async function (params) {
+    try{
+        let user = await findByUsername(params.username)
+        if(user){
+            throw {message: "Not an unique user"}
+        }
+        else{
+            await User.create(params)
+            return
+        }
+        
+    }catch(error){
+        throw {message: error.message || `Unable to create user ${params.username}`}
+    }
+}
+
+/**
+ * Used to delete all users
+ * @param {*} params 
+ */
+let deleteAll = async function(){
+    try{
+        await User.destroy({where: {}})
+        return
+    }catch(error){
+        throw {message: "Unable to delete all rooms"}
+    }
+}
+
+/**
+ * Find an user with a given param
+ * @param {*} param - {field: value}
+ */
+let findByUsername = async function (username) {
+    try {
+        return await User.findOne({
+            where: {
+                username
+            }
         });
-    }
-}
-
-let getAll = async function(req, res, next){
-    try{
-        let allUsers =  await Users.findAll()
-        return res.status(200).json(allUsers)
-    }catch(err){
-        next({
-            status: 400,
-            message: "Unable to get all users"
-        })
-    }
-}
-
-let login = async function (req, res, next){
-    try{
-        // Assume User has already logged in
-        res.status(200).json({message: "Welcome"})
-    }catch(err){
+    } catch (err) {
         console.log(err)
-        next({
-            status: 400,
-            message: "Invalid username/password"
-        })
+        throw `error finding users with ${username}`
     }
-}
-
-let isAuthenticated = function(req, res, next){
-    if(req.isAuthenticated()){
-        next()
-    }else{
-        return next({
-            status: 401,
-            message: "Please log in first"
-        })
-    }
-}
+};
 
 module.exports = {
-    register,
-    login,
-    isAuthenticated,
-    getUserById,
-    findOneByUsername,
-    getAll
+    findById,
+    getAll,
+    create,
+    deleteAll,
+    findByUsername
 }

@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {Link} from 'react-router-dom'
 
 const NavItem = ({item}) =>{
     // TODO: Return Nav Item
@@ -24,10 +25,10 @@ const PortfolioNav = ({isLoggedIn})=>{
     return isLoggedIn ? loggedInNav :
         <ul className="navbar-nav nav">
                 <li className="nav-item">
-                    <a className="nav-link" href="#">Login</a>
+                    <Link to="/login" className="nav-link">Login</Link>
                 </li>
                 <li className="nav-item">
-                    <a className="nav-link" href="#">Signup</a>
+                     <Link to="/signup" className="nav-link">Signup</Link>
                 </li>
         </ul>
 
@@ -36,7 +37,7 @@ const PortfolioNav = ({isLoggedIn})=>{
 class Navbar extends Component{
     render(){
         // TODO: Check if user is authenticated using state
-        let isLoggedIn = true;
+        let isLoggedIn = false;
 
         let navItems = [
             {name: "Active", href: "#"},
@@ -53,7 +54,7 @@ class Navbar extends Component{
           <nav id="nav" ref="table" className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="container">
                 <div className="navbar-header">
-                    <a id="nav-title" className="navbar-brand" href="#home">WYA 👀</a>
+                    <Link id="nav-title" className="navbar-brand" to="/">WYA 👀</Link>
                 </div>
                 <div className="collapse navbar-collapse" id="navbarResponsive">
                     <ul className="navbar-nav">
