@@ -1,16 +1,37 @@
 let Router = require('express').Router()
-let passport = require('passport')
-let {login, register, getAll} = require('../handlers/user')
+let {
+    getAll,
+    deleteAll
+} = require('../handlers/user')
 
-Router.route('/login')
-    .post(passport.authenticate('local'), login)
+// For debugging
+Router.route('/')
+    .get(function (req, res, next) {
+        getAll()
+            .then(users => {
+                res.status(200).json(users)
+            })
+            .catch(error =>{
+                next({
+                    status: 400,
+                    message: "Unable to retrieve all users"
+                })
+            })
+    })
 
-Router.route('/register')
-    .post(register)
-
-// for debugging
-// Router.route('/')
-//     .get(getAll)
-
+// For debugging
+Router.route('/')
+    .delete(function(req, res, next){
+        deleteAll()
+            .then(()=>{
+                res.status(200).json("message: All users have been deleted")
+            })
+            .catch(err=>{
+                next({
+                    status: 400,
+                    message: "Unable to delete all room"
+                })
+            })
+    })
 
 module.exports = Router
