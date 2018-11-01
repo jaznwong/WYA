@@ -1,33 +1,52 @@
-let localStrategy = require('passport-local').Strategy
-let {getUserById, findOneByUsername} = require('../handlers/user')
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const {
+    findById,
+    findByUsername
+} = require('../handlers/user')
 
-module.exports = function(passport){
-    passport.serializeUser(function(user, done){
-        // passing only userID
-        done(null, user.id)
-    })
+passport.use(new LocalStrategy({
+        usernameField: 'username',
+    },
+    (username, password, done) => {
+        findByUsername(username).then((user) => {
+            if (!user) {
+                return done(null, false, {
+                    message: 'Incorrect username.'
+                });
+            }
 
-    passport.deserializeUser(function(userID, done){
-        getUserById(userID)
-        .then(user=>{
-            done(null, user)
-        })
-        .catch(err=>{
-            done(err, null)
-            throw `error deserealizing user`
-        })
-    })
+            if (user.validPassword(password) === false) {
+                return done(null, false, {
+                    message: 'Incorrect password.'
+                });
+            }
 
-    // signup strategy
-    passport.use(new localStrategy(function(username, password, done){
-        findOneByUsername(username)
-            .then(user=>{
-                if(user == null) return done(null, false)
-                return user.validPassword(password)
-            })
-            .then(user=>{
-                return done(null, user)
-            })
-            .catch(err => done(err))
-    }))
-}
+            return done(null, user, {
+                message: 'Successfully Logged In!'
+            });
+        });
+    }));
+
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+    findById(id).then((user) => {
+        if (!user) {
+            return done(null, false);
+        }
+
+        return done(null, user);
+    });
+});
+
+passport.redirectIfLoggedIn = (route) =>
+    (req, res, next) => (req.user ? res.redirect(route) : next());
+
+passport.redirectIfNotLoggedIn = (route) =>
+    (req, res, next) => (req.user ? next() : res.redirect(route));
+
+
+module.exports = passport;
