@@ -34,7 +34,7 @@ class SearchedRoomsList extends Component{
 
 function mapStateToProp(reduxState){
     return {
-        rooms: reduxState.searchedRooms
+        rooms: reduxState.user.searchedRooms
     }
 }
 
