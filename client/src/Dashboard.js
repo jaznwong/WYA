@@ -5,9 +5,9 @@ import SearchedRoomsList from './components/dashboard/SearchedRoomsList'
 const Headline = function({firstName, eventToday}){
     return(
         <div className="jumbotron">
-            <h1 class="display-4">Hello {firstName}</h1>
-            <p class="lead">You have a meetup with {eventToday.name} at {eventToday.time}</p>
-            <a class="btn btn-secondary btn-lg" href="#" role="button">Get Updates</a>
+            <h1 className="display-4">Hello {firstName}</h1>
+            <p className="lead">You have a meetup with {eventToday.name} at {eventToday.time}</p>
+            <a className="btn btn-secondary btn-lg" href="#" role="button">Get Updates</a>
         </div>
     )
 }

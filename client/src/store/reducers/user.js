@@ -1,4 +1,4 @@
-import {SEARCH_ROOMS, AUTH_USER} from './actions'
+import {SEARCH_ROOMS, AUTH_USER} from '../actionTypes'
 
 const initialState = {
     searchedRooms: [],
@@ -8,7 +8,7 @@ const initialState = {
     }
 }
 
-export default function rootReducer(state=initialState, action){
+export default (state=initialState, action)=>{
     switch(action.type){
         case SEARCH_ROOMS:
             return{
