@@ -2,10 +2,8 @@ import {SEARCH_ROOMS, AUTH_USER} from '../actionTypes'
 
 const initialState = {
     searchedRooms: [],
-    user: {
-        isAuthenticated: false,
-        userData: {}
-    }
+    isAuthenticated: false,
+    userData: {}
 }
 
 export default (state=initialState, action)=>{
@@ -17,12 +15,11 @@ export default (state=initialState, action)=>{
             }
         case AUTH_USER:
             // TODO: authenticate based on other weather if userData is empty or not
+            console.log(Object.keys(action.userData).length)
             return{
                 ...state,
-                user: {
-                    isAuthenticated: Object.keys(action.userData).length > 0,
-                    userData: action.userData
-                }
+                isAuthenticated: Object.keys(action.userData).length > 0,
+                userData: action.userData
             }
         default:
             return state

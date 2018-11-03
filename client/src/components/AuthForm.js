@@ -6,22 +6,31 @@ class AuthForm extends Component{
     constructor(props){
         super(props)
         this.state = {
-            warningMessage: ""
+            warningMessage: "",
+            loader: false
         }
     }
     
     handleSubmit(event){
-        let {signup} = this.props
         event.preventDefault()
+        this.setState({loader: true})
+        let {signup} = this.props
         let username = document.getElementById('username').value
         let password = document.getElementById('password').value
-        authUser(signup, username, password)
+        this.props.authUser(signup, username, password)
             .then(()=>{
-                this.setState({warningMessage: "Error"})
+                this.setState({
+                    warningMessage: "",
+                    loader: false
+                })
                 this.props.history.push('/')
             })
-            .catch(()=>{
-                this.setState({warningMessage: "Error"})
+            .catch((err)=>{
+                console.log(err)
+                this.setState({
+                    warningMessage: "Error",
+                    loader: false
+                })
             })
     }
     
@@ -32,7 +41,7 @@ class AuthForm extends Component{
                  <h2>{header}</h2>
                     {this.state.warningMessage.length > 0 ? 
                         (<div class="alert alert-primary" role="alert">
-                            A simple primary alert—check it out!
+                            {this.state.warningMessage}
                         </div>)
                         :
                         (<div></div>)
@@ -46,11 +55,22 @@ class AuthForm extends Component{
                       <label htmlFor="password">Password</label>
                       <input type="password" className="form-control" id="password" placeholder="Password" />
                     </div>
-                    <button type="submit" className="btn btn-secondary">{buttonText}</button>
+                    {!this.state.loader ? 
+                        <button type="submit" className="btn btn-secondary">{buttonText}</button>
+                        : <div className="loader"></div>
+                    }
                   </form>
             </div>
         )
     }
 }
 
-export default AuthForm
+// function mapDispatchToProps(dispatch){
+//     return {
+//         authUser: function(signup, username, password){
+//             dispatch(authUser(signup, username, password))
+//         }
+//     }
+// }
+
+export default connect(null, {authUser})(AuthForm)

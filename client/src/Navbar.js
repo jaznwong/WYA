@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
 
 const NavItem = ({item}) =>{
     // TODO: Return Nav Item
@@ -11,7 +12,7 @@ const NavItem = ({item}) =>{
         )
 }
 
-const PortfolioNav = ({isLoggedIn})=>{
+const PortfolioNav = ({isAuthenticated})=>{
     let loggedInNav = 
         <ul className="navbar-nav nav">
             <li className="nav-item">
@@ -22,7 +23,7 @@ const PortfolioNav = ({isLoggedIn})=>{
             </li>
         </ul>
     
-    return isLoggedIn ? loggedInNav :
+    return isAuthenticated ? loggedInNav :
         <ul className="navbar-nav nav">
                 <li className="nav-item">
                     <Link to="/login" className="nav-link">Login</Link>
@@ -37,7 +38,7 @@ const PortfolioNav = ({isLoggedIn})=>{
 class Navbar extends Component{
     render(){
         // TODO: Check if user is authenticated using state
-        let isLoggedIn = false;
+        let {isAuthenticated} = this.props
 
         let navItems = [
             {name: "Active", href: "#"},
@@ -61,7 +62,7 @@ class Navbar extends Component{
                         {navList}
                     </ul>
                 </div>
-                <PortfolioNav isLoggedIn={isLoggedIn} />
+                <PortfolioNav isAuthenticated={isAuthenticated} />
                 <div>
                 </div>
             </div>
@@ -70,4 +71,11 @@ class Navbar extends Component{
     }
 }
 
-export default Navbar
+function mapStateToProps(reduxState){
+    console.log(reduxState)
+    return{
+        isAuthenticated: reduxState.user.isAuthenticated
+    }
+}
+
+export default connect(mapStateToProps, null)(Navbar)
