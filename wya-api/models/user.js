@@ -12,6 +12,18 @@ module.exports = function (sequelize, DataTypes) {
         },
         password: {
             type: DataTypes.STRING
+        },
+        interests: {
+              type: DataTypes.ARRAY(DataTypes.STRING),
+              validate: {
+                  notNull: false,
+              }
+        },
+        availability: {
+            type: DataTypes.JSON,
+            validate: {
+                notNull: false,
+            }
         }
     })
 
