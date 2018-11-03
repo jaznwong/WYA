@@ -16,7 +16,7 @@ const PortfolioNav = ({isAuthenticated})=>{
     let loggedInNav = 
         <ul className="navbar-nav nav">
             <li className="nav-item">
-                <a className="nav-link" href="#">Profile</a>
+                <Link to="/profile" className="nav-link">Profile</Link>
             </li>
             <li className="nav-item">
                 <a className="nav-link" href="#">Logout</a>
@@ -72,7 +72,6 @@ class Navbar extends Component{
 }
 
 function mapStateToProps(reduxState){
-    console.log(reduxState)
     return{
         isAuthenticated: reduxState.user.isAuthenticated
     }

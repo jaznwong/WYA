@@ -12,6 +12,14 @@ module.exports = function (sequelize, DataTypes) {
         },
         password: {
             type: DataTypes.STRING
+        },
+        interests: {
+              type: DataTypes.ARRAY(DataTypes.STRING),
+              allowNull: true
+        },
+        availability: {
+            type: DataTypes.JSON,
+            allowNull: true
         }
     })
 

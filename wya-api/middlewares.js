@@ -3,9 +3,9 @@
  */
 module.exports = function isAuthenticated(req, res, next){
     if(req.isAuthenticated()){
-        next()
+        next(req.user, null)
     }else{
-        return next({
+        return next(null, {
             status: 401,
             message: "Please log in first"
         })

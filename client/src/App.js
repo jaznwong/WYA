@@ -3,10 +3,13 @@ import './App.css';
 import Dashboard from './Dashboard'
 import AuthForm from './components/AuthForm'
 import Navbar from './Navbar'
-import {withRouter, Route, Switch} from 'react-router-dom'
+import Profile from './Profile'
+import {withRouter, Route, Switch, Redirect} from 'react-router-dom'
+import {connect} from 'react-redux'
 
 class App extends Component {
     render(){
+        let {isAuthenticated} = this.props
         return(
             <div>
                 <Navbar />,
@@ -27,6 +30,17 @@ class App extends Component {
                                 header={"See what's going on!"}
                                 />
                         )} />
+                        <Route path='/login' render={props=>(
+                            <AuthForm {...props} 
+                                signup={false} 
+                                buttonText={"Signin"}
+                                header={"See what's going on!"}
+                                />
+                        )} />
+                        <Route path='/profile' render={props=>(
+                            isAuthenticated ? 
+                                <Profile /> : <Redirect to="/login"/>
+                        )} />
                     </Switch>
                 </div>
             </div>
@@ -34,4 +48,12 @@ class App extends Component {
     }
 }
 
-export default withRouter(App);
+function mapStateToProps(reduxState){
+    return{
+        isAuthenticated: reduxState.user.isAuthenticated
+    }
+}
+
+export default withRouter(
+    connect(mapStateToProps, null)(App)
+);
