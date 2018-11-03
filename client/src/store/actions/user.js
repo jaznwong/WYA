@@ -57,3 +57,15 @@ export function handleSuggestInterests(query){
         suggestedInterests: interests
     }
 }
+
+export function postAvailablity(availabilities){
+    return dispatch=>{
+        return Promise.resolve()
+    }
+}
+
+export function postInterests(interests){
+    return dispatch=>{
+        return Promise.resolve()
+    }
+}

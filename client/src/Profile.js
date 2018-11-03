@@ -1,10 +1,14 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {handleSuggestInterests} from './store/actions/user'
+import {handleSuggestInterests, postInterests, postAvailablity} from './store/actions/user'
 
 class Profile extends Component{
     /** Dcoumentation
     *       - Access suggested interests through this.props.suggestedInterests
+    *       - Post user interests to the database by running, this.props.postInterests(interests)
+    *       - Post user availability to the database by running this.props.postAvailability(availabilities)
+    *       - The postAvailability and PostInterests returns a promise. You should wait for those two promises
+    *           to resolve before going to a new page
     *       - Update suggestedInterests by running this.props.handleSuggestInterests(userSearch)
     *           whenever the user types something in the interest search bar
     */
@@ -26,6 +30,8 @@ function mapStateToProps(reduxState){
 
 function mapDispatchToProps(dispatch){
     return{
+        postInterests,
+        postAvailablity,
         handleSuggestInterests: function(query){
             dispatch(handleSuggestInterests(query))
         }
