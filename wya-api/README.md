@@ -10,7 +10,10 @@
 - Edit `config/config.json`
     + Add your username, password, and database names
 
-
+- Create local database
+| | + createuser -P -s -e wya_user
+| | | + password should also be wya_user
+| | + createdb -h localhost -U wya_user wya_dev
 ## Explanations
 
 - `/config/config.json`
@@ -31,6 +34,3 @@
 - If you want to add views and handlebars to your server side
     + Uncomment the corresponding code in `app.js`
     + Add a `/views` folder and the appropriate templates
-
-
-
