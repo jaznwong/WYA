@@ -1,10 +1,13 @@
-import {SEARCH_ROOMS, AUTH_USER} from '../actionTypes'
+import {SEARCH_ROOMS, AUTH_USER, SUGGEST_INTEREST} from '../actionTypes'
 
 const initialState = {
     searchedRooms: [],
-    user: {
-        isAuthenticated: false,
-        userData: {}
+    suggestedInterests: [],
+    userData: {},
+    // TODO: Should be false by default
+    isAuthenticated: true,
+    profile: {
+        suggestedInterests: []
     }
 }
 
@@ -19,9 +22,15 @@ export default (state=initialState, action)=>{
             // TODO: authenticate based on other weather if userData is empty or not
             return{
                 ...state,
-                user: {
-                    isAuthenticated: Object.keys(action.userData).length > 0,
-                    userData: action.userData
+                isAuthenticated: Object.keys(action.userData).length > 0,
+                userData: action.userData
+            }
+        case SUGGEST_INTEREST:
+            return{
+                ...state,
+                profile: {
+                    ...state.profile,
+                    suggestedInterests: action.suggestedInterests
                 }
             }
         default:

@@ -1,4 +1,4 @@
-import {SEARCH_ROOMS, AUTH_USER} from '../actionTypes'
+import {SEARCH_ROOMS, AUTH_USER, SUGGEST_INTEREST} from '../actionTypes'
 // TODO: Make this into an env variable
 const apiRoute = process.env.REACT_APP_API_URL || "/"
 
@@ -42,5 +42,30 @@ export function searchRooms(query){
             .then(res => res.json())
             .then(rooms => dispatch(searchRoomsAction(rooms.roomList)))
             .catch(err => console.log(`Error in fetching searchRooms from ${apiRoute}`))
+    }
+}
+
+export function handleSuggestInterests(query){
+    // TOOD: Create a dynamic interest section
+    console.log("handleSuggestInterests called")
+    const defaultInterests = [
+            "art", "automotive", "beauty", "food", "drinks", "sports", "technology"
+        ]
+    let interests = defaultInterests.filter(interest=>(interest.includes(query)))
+    return{
+        type: SUGGEST_INTEREST,
+        suggestedInterests: interests
+    }
+}
+
+export function postAvailablity(availabilities){
+    return dispatch=>{
+        return Promise.resolve()
+    }
+}
+
+export function postInterests(interests){
+    return dispatch=>{
+        return Promise.resolve()
     }
 }

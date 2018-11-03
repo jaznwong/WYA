@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
 
 const NavItem = ({item}) =>{
     // TODO: Return Nav Item
@@ -15,7 +16,7 @@ const PortfolioNav = ({isLoggedIn})=>{
     let loggedInNav = 
         <ul className="navbar-nav nav">
             <li className="nav-item">
-                <a className="nav-link" href="#">Profile</a>
+                <Link to="/profile" className="nav-link">Profile</Link>
             </li>
             <li className="nav-item">
                 <a className="nav-link" href="#">Logout</a>
@@ -37,7 +38,7 @@ const PortfolioNav = ({isLoggedIn})=>{
 class Navbar extends Component{
     render(){
         // TODO: Check if user is authenticated using state
-        let isLoggedIn = false;
+        let {isAuthenticated} = this.props;
 
         let navItems = [
             {name: "Active", href: "#"},
@@ -61,7 +62,7 @@ class Navbar extends Component{
                         {navList}
                     </ul>
                 </div>
-                <PortfolioNav isLoggedIn={isLoggedIn} />
+                <PortfolioNav isLoggedIn={isAuthenticated} />
                 <div>
                 </div>
             </div>
@@ -70,4 +71,10 @@ class Navbar extends Component{
     }
 }
 
-export default Navbar
+function mapStateToProps(reduxState){
+    return{
+        isAuthenticated: reduxState.user.isAuthenticated
+    }
+}
+
+export default connect(mapStateToProps, null)(Navbar)
