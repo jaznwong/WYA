@@ -15,15 +15,11 @@ module.exports = function (sequelize, DataTypes) {
         },
         interests: {
               type: DataTypes.ARRAY(DataTypes.STRING),
-              validate: {
-                  notNull: false,
-              }
+              allowNull: true
         },
         availability: {
             type: DataTypes.JSON,
-            validate: {
-                notNull: false,
-            }
+            allowNull: true
         }
     })
 
