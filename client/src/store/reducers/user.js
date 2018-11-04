@@ -1,4 +1,4 @@
-import {SEARCH_ROOMS, AUTH_USER, SUGGEST_INTEREST, LOGOUT} from '../actionTypes'
+import {SEARCH_ROOMS, AUTH_USER, SUGGEST_INTEREST, LOGOUT, SET_USER_INTEREST, SET_USER_AVAILABILITY} from '../actionTypes'
 
 const initialState = {
     searchedRooms: [],
@@ -6,9 +6,6 @@ const initialState = {
     userData: {},
     // TODO: Should be false by default
     isAuthenticated: false,
-    profile: {
-        suggestedInterests: []
-    }
 }
 
 export default (state=initialState, action)=>{
@@ -33,6 +30,22 @@ export default (state=initialState, action)=>{
                 profile: {
                     ...state.profile,
                     suggestedInterests: action.suggestedInterests
+                }
+            }
+        case SET_USER_INTEREST:
+            return{
+                ...state,
+                userData: {
+                    ...state.userData,
+                    interests: action.interests
+                }   
+            }
+        case SET_USER_AVAILABILITY:
+            return{
+                ...state,
+                userData: {
+                    ...state.userData,
+                    availability: action.availability
                 }
             }
         default:
