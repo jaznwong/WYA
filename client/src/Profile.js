@@ -14,9 +14,23 @@ class Profile extends Component{
     */
     
     render(){
+        let interests = this.props.suggestedInterests.map((item, key)=>(
+            <option value={item}>{item}</option>
+        ))
+
+        console.log(this.props.suggestedInterests)
+        
         return(
             <div>
                 <h1>Hello, Profile</h1>
+                <input onChange={(e)=>{
+                    e.preventDefault()
+                    let {value} = e.target
+                    this.props.handleSuggestInterests(value)
+                }}></input>
+                <select>
+                    {interests}
+                </select>
             </div>
         )
     }
@@ -24,7 +38,7 @@ class Profile extends Component{
 
 function mapStateToProps(reduxState){
     return{
-        suggestedInterests: reduxState.user.profile.suggestedInterests
+        suggestedInterests: reduxState.user.suggestedInterests
     }
 }
 
