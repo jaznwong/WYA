@@ -1,8 +1,7 @@
 import {SEARCH_ROOMS, SUGGEST_INTEREST} from '../actionTypes'
-import {ROOT_API} from '../../const'
+import {server} from '../../services/api'
 import axios from 'axios'
 // TODO: Make this into an env variable
-const apiRoute = ROOT_API
 
 function searchRoomsAction(searchedRooms){
     return{
@@ -13,10 +12,12 @@ function searchRoomsAction(searchedRooms){
 
 export function searchRooms(query){
     return dispatch => {
-        let url = apiRoute + "/rooms/" + query;
-        return fetch(url)
-            .then(res => res.json())
-            .then(rooms => dispatch(searchRoomsAction(rooms.roomList)))
+        let url = "/room/" + query;
+        return server.get(url)
+            .then(({roomList}) =>{
+                console.log(roomList)
+                dispatch(searchRoomsAction(roomList))
+            })
             .catch(err => console.log(`Error in fetching searchRooms from ${url}`))
     }
 }
@@ -28,13 +29,15 @@ export function updateInterests(){
 export function postInterests(interests){
     return dispatch =>{
         return new Promise((resolve, reject)=>{
-            let url = apiRoute + "/user/availability"
-            axios.post(url, {interests})
+            let url = "/user/interest"
+            server.post(url, {interests})
                 .then(res=>{
+                    console.log(res)
                     resolve()
                 })
                 .catch(err=> {
-                    console.log(`Error posting interests`)
+                    console.log(err)
+                    // console.log(`Error posting interests`)
                     reject()
                 })
         })
@@ -54,8 +57,19 @@ export function handleSuggestInterests(query){
     }
 }
 
-export function postAvailablity(availabilities){
+export function postAvailablity(availability){
     return dispatch=>{
-        return Promise.resolve()
+        return new Promise((resolve, reject)=>{
+            let url = "/user/availability"
+            server.post(url, {availability})
+                .then(res=>{
+                    console.log(res)
+                    resolve()
+                })
+                .catch(err=>{
+                    console.error(err)
+                    reject()
+                })
+        })
     }
 }

@@ -1,5 +1,5 @@
 import {AUTH_USER, LOGOUT} from '../actionTypes'
-import {ROOT_API} from '../../const'
+import {server} from '../../services/api'
 import axios from 'axios'
 
 function authUserAction(userData){
@@ -11,14 +11,14 @@ function authUserAction(userData){
 
 // Login or Register
 export function authUser(signup, username, password){
-    let url = ROOT_API + "/auth/" + (signup ? "signup" : "login");
+    let route = "/auth/" + (signup ? "signup" : "login");
     let data = {
         username,
         password
     }
     return dispatch =>{
         return new Promise((resolve, reject)=>{
-            axios.post(url, data)
+            server.post(route, data)
                 .then(res=>{
                     let {user} = res.data
                     dispatch(authUserAction(user))
@@ -32,8 +32,8 @@ export function authUser(signup, username, password){
 }
 
 export function logout(){
-    let url = ROOT_API + "/auth/logout"
-    axios.post(url)
+    let url = "/auth/logout"
+    server.post(url)
         .then(({message})=>{
             console.log(message)
         })
