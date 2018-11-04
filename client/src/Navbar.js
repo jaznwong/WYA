@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
+import {logout} from './store/actions/auth'
 
 const NavItem = ({item}) =>{
     // TODO: Return Nav Item
@@ -12,18 +13,19 @@ const NavItem = ({item}) =>{
         )
 }
 
-const PortfolioNav = ({isLoggedIn})=>{
+const PortfolioNav = ({isAuthenticated, handleLogout})=>{
     let loggedInNav = 
         <ul className="navbar-nav nav">
             <li className="nav-item">
                 <Link to="/profile" className="nav-link">Profile</Link>
             </li>
             <li className="nav-item">
-                <a className="nav-link" href="#">Logout</a>
+                <a className="nav-link" href="#" onClick={handleLogout}>Logout
+                </a>
             </li>
         </ul>
     
-    return isLoggedIn ? loggedInNav :
+    return isAuthenticated ? loggedInNav :
         <ul className="navbar-nav nav">
                 <li className="nav-item">
                     <Link to="/login" className="nav-link">Login</Link>
@@ -36,9 +38,15 @@ const PortfolioNav = ({isLoggedIn})=>{
 }
 
 class Navbar extends Component{
+    handleLogout(event){
+        event.preventDefault()
+        this.props.logout()
+        this.props.history.push('/')
+    }
+
     render(){
         // TODO: Check if user is authenticated using state
-        let {isAuthenticated} = this.props;
+        let {isAuthenticated} = this.props
 
         let navItems = [
             {name: "Active", href: "#"},
@@ -49,7 +57,6 @@ class Navbar extends Component{
         let navList = navItems.map((item, index)=>(
             <NavItem item={item} key={"navitem-"+index}/>
         ))
-
 
         return (
           <nav id="nav" ref="table" className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -62,7 +69,7 @@ class Navbar extends Component{
                         {navList}
                     </ul>
                 </div>
-                <PortfolioNav isLoggedIn={isAuthenticated} />
+                <PortfolioNav isAuthenticated={isAuthenticated} handleLogout={this.handleLogout.bind(this)} />
                 <div>
                 </div>
             </div>
@@ -77,4 +84,12 @@ function mapStateToProps(reduxState){
     }
 }
 
-export default connect(mapStateToProps, null)(Navbar)
+function mapDispatchToProps(dispatch){
+    return{
+        logout: function(){
+            dispatch(logout())
+        }
+    }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Navbar))

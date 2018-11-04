@@ -33,7 +33,7 @@ function mapDispatchToProps(dispatch){
         postInterests,
         postAvailablity,
         handleSuggestInterests: function(query){
-            dispatch(handleSuggestInterests(query))
+            return dispatch(handleSuggestInterests(query))
         }
     }
 }

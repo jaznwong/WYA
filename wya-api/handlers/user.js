@@ -72,8 +72,8 @@ let findByUsername = async function (username) {
             }
         });
     } catch (err) {
-        console.log(err)
-        throw `error finding users with ${username}`
+        // console.log(err)
+        throw `error finding users with username ${username}`
     }
 };
 

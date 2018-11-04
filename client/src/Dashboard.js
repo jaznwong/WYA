@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import SearchForm from './components/dashboard/SearchForm'
 import SearchedRoomsList from './components/dashboard/SearchedRoomsList'
 
@@ -17,7 +18,9 @@ class Dashboard extends Component{
     render(){
         return (
             <div>
-                <Headline firstName={"John"} eventToday={{name: "Cross Country", time: "4:00 PM"}} />
+                {this.props.username && 
+                    <Headline firstName={this.props.username} eventToday={{name: "Cross Country", time: "4:00 PM"}} />
+                }
                 <SearchForm />
                 <SearchedRoomsList />
             </div>
@@ -25,4 +28,10 @@ class Dashboard extends Component{
     }
 }
 
-export default Dashboard
+function mapStateToProps(reduxState){
+    return{
+        username: reduxState.user.userData.username
+    }
+}
+
+export default connect(mapStateToProps, null)(Dashboard)

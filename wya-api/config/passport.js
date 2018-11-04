@@ -10,20 +10,22 @@ passport.use(new LocalStrategy({
     },
     (username, password, done) => {
         findByUsername(username).then((user) => {
-            if (!user) {
-                return done(null, false, {
-                    message: 'Incorrect username.'
-                });
-            }
-
-            if (user.validPassword(password) === false) {
-                return done(null, false, {
-                    message: 'Incorrect password.'
-                });
-            }
-
-            return done(null, user, {
-                message: 'Successfully Logged In!'
+            user.validPassword(password)
+                .then(match=>{
+                    if(!match){
+                        return done(null, false, {
+                            message: 'Incorrect password.'
+                        })
+                    }else{
+                        return done(null, user, {
+                            message: 'Successfully Logged In!'
+                        })
+                    }
+                })
+        })
+        .catch(err=>{
+            return done(null, false, {
+                message: 'Incorrect username.'
             });
         });
     }));
