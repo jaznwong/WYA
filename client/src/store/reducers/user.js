@@ -27,10 +27,7 @@ export default (state=initialState, action)=>{
         case SUGGEST_INTEREST:
             return{
                 ...state,
-                profile: {
-                    ...state.profile,
-                    suggestedInterests: action.suggestedInterests
-                }
+                suggestedInterests: action.suggestedInterests
             }
         case SET_USER_INTEREST:
             return{

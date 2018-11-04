@@ -4,6 +4,7 @@ import Dashboard from './Dashboard'
 import AuthForm from './components/AuthForm'
 import Navbar from './Navbar'
 import Profile from './Profile'
+import Test from './Test'
 import {withRouter, Route, Switch, Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
 
@@ -40,6 +41,9 @@ class App extends Component {
                         <Route path='/profile' render={props=>(
                             isAuthenticated ? 
                                 <Profile /> : <Redirect to="/login"/>
+                        )} />
+                        <Route path='/test' render={props=>(
+                            <Test {...props} />
                         )} />
                     </Switch>
                 </div>

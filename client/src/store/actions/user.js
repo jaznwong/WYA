@@ -50,7 +50,6 @@ export function postInterests(interests){
 
 export function handleSuggestInterests(query){
     // TOOD: Create a dynamic interest section
-    console.log("handleSuggestInterests called")
     const defaultInterests = [
             "art", "automotive", "beauty", "food", "drinks", "sports", "technology"
         ]
