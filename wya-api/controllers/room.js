@@ -5,11 +5,11 @@ const Sequelize = require('sequelize');
 const router = express.Router();
 
 
-router.get('/', (req, res) => {
+router.get('/hardcode', (req, res) => {
   let hardCodedRooms = []
   for (let i = 0; i < 5; i++){
     hardCodedRooms.push(models.Rooms.create({
-      name: `Test Room #${i}`,
+      name: `Test Room ${i}`,
       isFinalized: false
     }));
   }
@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
   });
 });
 
-router.get('/rooms/', (req, res) => {
+router.get('/', (req, res) => {
   models.Rooms.findAll().then(rooms => {
     res.json({
       roomList: rooms
@@ -28,7 +28,7 @@ router.get('/rooms/', (req, res) => {
   });
 });
 
-router.get('/rooms/:searchQuery', (req, res) => {
+router.get('/:searchQuery', (req, res) => {
   models.Rooms.findAll({
     where: {
       name: {[Sequelize.Op.like] : `%${req.param('searchQuery')}%`}
