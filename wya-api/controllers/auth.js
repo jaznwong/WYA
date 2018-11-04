@@ -11,5 +11,12 @@ Router.route('/login')
 Router.route('/signup')
     .post(signup)
 
+Router.route('/logout')
+    .post((req, res, next)=>{
+        req.logout()
+        res.status(200).json({
+            message: "You have been successfully logged out"
+        })
+    })
 
 module.exports = Router
