@@ -1,8 +1,7 @@
-import {SEARCH_ROOMS, SUGGEST_INTEREST} from '../actionTypes'
-import {ROOT_API} from '../../const'
+import {SEARCH_ROOMS, SUGGEST_INTEREST, SET_USER_INTEREST, SET_USER_AVAILABILITY} from '../actionTypes'
+import {server} from '../../services/api'
 import axios from 'axios'
 // TODO: Make this into an env variable
-const apiRoute = ROOT_API
 
 function searchRoomsAction(searchedRooms){
     return{
@@ -11,30 +10,38 @@ function searchRoomsAction(searchedRooms){
     }
 }
 
-export function searchRooms(query){
-    return dispatch => {
-        let url = apiRoute + "/rooms/" + query;
-        return fetch(url)
-            .then(res => res.json())
-            .then(rooms => dispatch(searchRoomsAction(rooms.roomList)))
-            .catch(err => console.log(`Error in fetching searchRooms from ${url}`))
+function setUserInterest(interests){
+    return {
+        type: SET_USER_INTEREST,
+        interests
     }
 }
 
-export function updateInterests(){
-
+export function searchRooms(query){
+    return dispatch => {
+        let url = "/room/" + query;
+        return server.get(url)
+            .then(({roomList}) =>{
+                console.log(roomList)
+                dispatch(searchRoomsAction(roomList))
+            })
+            .catch(err => console.log(`Error in fetching searchRooms from ${url}`))
+    }
 }
 
 export function postInterests(interests){
     return dispatch =>{
         return new Promise((resolve, reject)=>{
-            let url = apiRoute + "/user/availability"
-            axios.post(url, {interests})
-                .then(res=>{
-                    resolve()
+            let url = "/user/interest"
+            server.post(url, {interests})
+                .then(({interest})=>{
+                    console.log(interests)
+                    dispatch(setUserInterest(interest))
+                    resolve(interest)
                 })
                 .catch(err=> {
-                    console.log(`Error posting interests`)
+                    console.log(err)
+                    // console.log(`Error posting interests`)
                     reject()
                 })
         })
@@ -54,8 +61,27 @@ export function handleSuggestInterests(query){
     }
 }
 
-export function postAvailablity(availabilities){
+function setUserAvailability(availability){
+    return{
+        type: SET_USER_AVAILABILITY,
+        availability
+    }
+}
+
+export function postAvailablity(availability){
     return dispatch=>{
-        return Promise.resolve()
+        return new Promise((resolve, reject)=>{
+            let url = "/user/availability"
+            server.post(url, {availability})
+                .then(data=>{
+                    let avail = data.avail
+                    dispatch(setUserAvailability(avail))
+                    resolve(avail)
+                })
+                .catch(err=>{
+                    console.error(err)
+                    reject()
+                })
+        })
     }
 }

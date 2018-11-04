@@ -8,9 +8,11 @@ const errorHandler = require('./handlers/error')
 const PORT = process.env.PORT || 8000;
 
 const app = express();
+const origin = process.env.ORIGIN || "http://localhost:3000"
 
 // Cors
-app.use(require('cors')())
+var cors = require('cors');
+app.use(cors({credentials: true, origin}));
 
 app.use(bodyParser.urlencoded({
   extended: false
@@ -21,11 +23,17 @@ app.use(cookieParser())
 // Setting up passport
 app.use(session({
   secret: "super-secret-keyword-that-should-be-in-env-file",
-  resave: false,
-  saveUninitialized: false
+  resave: true,
+  saveUninitialized: true
 }))
 app.use(passport.initialize())
 app.use(passport.session())
+
+// app.use(function(req, res, next){
+//   console.dir(`body: ${req.body}`)
+//   console.dir("isAuthenticated: " + req.isAuthenticated())
+//   return next()
+// })
 
 // Uncomment the following if you want to serve up static assets.
 // (You must create the public folder)

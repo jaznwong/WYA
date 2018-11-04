@@ -46,9 +46,10 @@ Router.route('/interest')
             if(user){
                 console.log(req.body.interests)
                 user.update({
-                    interests: JSON.parse(req.body.interests)
+                    interests: req.body.interests
                 }).then(() => {
-                    res.status(200).json(user)
+                    console.log(user)
+                    res.status(200).json({interests: user.dataValues.interests})
                 })
             }
             else res.status(401).json(err.message)
@@ -64,9 +65,9 @@ Router.route('/availability')
             if(user){
                 console.log(req.body.availability)
                 user.update({
-                    availability: JSON.parse(req.body.availability)
+                    availability: req.body.availability
                 }).then(() => {
-                    res.status(200).json(user)
+                    res.status(200).json(user.dataValues.availability)
                 })
             }
             else res.status(401).json(err.message)
