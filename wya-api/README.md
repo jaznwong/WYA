@@ -1,4 +1,4 @@
-# Backend Starter Code
+# WYA Backend
 
 
 ## Setup
@@ -9,6 +9,8 @@
 
 - Edit `config/config.json`
     + Add your username, password, and database names
+    
+- If React ISN'T running on localhost:3000, update the variable origin to the address of your frontend
 
 - Create local database
 | | + createuser -P -s -e wya_user
