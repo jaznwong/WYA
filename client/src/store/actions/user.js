@@ -1,40 +1,13 @@
-import {SEARCH_ROOMS, AUTH_USER, SUGGEST_INTEREST} from '../actionTypes'
+import {SEARCH_ROOMS, SUGGEST_INTEREST} from '../actionTypes'
+import {ROOT_API} from '../../const'
+import axios from 'axios'
 // TODO: Make this into an env variable
-const apiRoute = "http://localhost:8000"
+const apiRoute = ROOT_API
 
 function searchRoomsAction(searchedRooms){
     return{
         type: SEARCH_ROOMS,
         searchedRooms
-    }
-}
-
-function authUserAction(userData){
-    return{
-        type: AUTH_USER,
-        userData
-    }
-}
-
-// Login or Register
-export function authUser(signup, username, password){
-    let url = apiRoute + "/auth/" + (signup ? "signup" : "login");
-    let data = {
-        username,
-        password
-    }
-    return dispatch =>{
-        return new Promise((resolve, reject)=>{
-            axios.post(url, data)
-                .then(res=>{
-                    let {user} = res.data
-                    dispatch(authUserAction(user))
-                    resolve()
-                })       
-                .catch(err=>{
-                    reject(err)
-                })
-        })
     }
 }
 
@@ -82,12 +55,6 @@ export function handleSuggestInterests(query){
 }
 
 export function postAvailablity(availabilities){
-    return dispatch=>{
-        return Promise.resolve()
-    }
-}
-
-export function postInterests(interests){
     return dispatch=>{
         return Promise.resolve()
     }
