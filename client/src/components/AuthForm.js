@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {authUser} from '../store/actions/user'
+import {authUser} from '../store/actions/auth'
 import {connect} from 'react-redux'
 
 class AuthForm extends Component{
@@ -26,9 +26,8 @@ class AuthForm extends Component{
                 this.props.history.push('/')
             })
             .catch((err)=>{
-                console.log(err)
                 this.setState({
-                    warningMessage: "Error",
+                    warningMessage: "Invalid Username/Password",
                     loader: false
                 })
             })
@@ -40,7 +39,7 @@ class AuthForm extends Component{
             <div>
                  <h2>{header}</h2>
                     {this.state.warningMessage.length > 0 ? 
-                        (<div class="alert alert-primary" role="alert">
+                        (<div className="alert alert-danger" role="alert">
                             {this.state.warningMessage}
                         </div>)
                         :

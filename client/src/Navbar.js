@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
+import {logout} from './store/actions/auth'
 
 const NavItem = ({item}) =>{
     // TODO: Return Nav Item
@@ -12,14 +13,15 @@ const NavItem = ({item}) =>{
         )
 }
 
-const PortfolioNav = ({isAuthenticated})=>{
+const PortfolioNav = ({isAuthenticated, handleLogout})=>{
     let loggedInNav = 
         <ul className="navbar-nav nav">
             <li className="nav-item">
                 <Link to="/profile" className="nav-link">Profile</Link>
             </li>
             <li className="nav-item">
-                <a className="nav-link" href="#">Logout</a>
+                <a className="nav-link" href="#" onClick={handleLogout}>Logout
+                </a>
             </li>
         </ul>
     
@@ -36,6 +38,12 @@ const PortfolioNav = ({isAuthenticated})=>{
 }
 
 class Navbar extends Component{
+    handleLogout(event){
+        event.preventDefault()
+        this.props.logout()
+        this.props.history.push('/')
+    }
+
     render(){
         // TODO: Check if user is authenticated using state
         let {isAuthenticated} = this.props
@@ -50,7 +58,6 @@ class Navbar extends Component{
             <NavItem item={item} key={"navitem-"+index}/>
         ))
 
-
         return (
           <nav id="nav" ref="table" className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="container">
@@ -62,7 +69,7 @@ class Navbar extends Component{
                         {navList}
                     </ul>
                 </div>
-                <PortfolioNav isAuthenticated={isAuthenticated} />
+                <PortfolioNav isAuthenticated={isAuthenticated} handleLogout={this.handleLogout.bind(this)} />
                 <div>
                 </div>
             </div>
@@ -77,4 +84,12 @@ function mapStateToProps(reduxState){
     }
 }
 
-export default connect(mapStateToProps, null)(Navbar)
+function mapDispatchToProps(dispatch){
+    return{
+        logout: function(){
+            dispatch(logout())
+        }
+    }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Navbar))
