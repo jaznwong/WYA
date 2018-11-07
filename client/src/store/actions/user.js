@@ -53,7 +53,9 @@ export function handleSuggestInterests(query){
     const defaultInterests = [
             "art", "automotive", "beauty", "food", "drinks", "sports", "technology"
         ]
-    let interests = defaultInterests.filter(interest=>(interest.includes(query)))
+    // let interests = defaultInterests.filter(interest=>(interest.includes(query)))
+    let interests = defaultInterests
+    console.log('suggested: ' + interests)
     return{
         type: SUGGEST_INTEREST,
         suggestedInterests: interests

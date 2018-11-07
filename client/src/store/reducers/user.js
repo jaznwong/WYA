@@ -2,10 +2,12 @@ import {SEARCH_ROOMS, AUTH_USER, SUGGEST_INTEREST, LOGOUT, SET_USER_INTEREST, SE
 
 const initialState = {
     searchedRooms: [],
-    suggestedInterests: [],
+    suggestedInterests: [
+            "art", "automotive", "beauty", "food", "drinks", "sports", "technology"
+        ],
     userData: {},
     // TODO: Should be false by default
-    isAuthenticated: false,
+    isAuthenticated: true,
 }
 
 export default (state=initialState, action)=>{
@@ -35,7 +37,7 @@ export default (state=initialState, action)=>{
                 userData: {
                     ...state.userData,
                     interests: action.interests
-                }   
+                }
             }
         case SET_USER_AVAILABILITY:
             return{
