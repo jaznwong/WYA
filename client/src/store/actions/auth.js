@@ -1,6 +1,5 @@
 import {AUTH_USER, LOGOUT} from '../actionTypes'
 import {server} from '../../services/api'
-import axios from 'axios'
 
 function authUserAction(userData){
     return{
@@ -26,6 +25,22 @@ export function authUser(signup, username, password){
                 })       
                 .catch(err=>{
                     reject(err)
+                })
+        })
+    }
+}
+
+export function initiateUser() {
+    console.log("Initiating user")
+    return dispatch => {
+        return new Promise((resolve, reject) => {
+            let url = "/user/who_am_i"
+            server.get(url)
+                .then((user) => {
+                    dispatch(authUserAction(user))
+                })
+                .catch(err => {
+                    console.log("Unauthorized")
                 })
         })
     }
