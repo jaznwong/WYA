@@ -5,6 +5,7 @@ import AuthForm from './components/AuthForm'
 import Navbar from './Navbar'
 import Profile from './Profile'
 import Test from './Test'
+import Room from './RoomForm'
 import {withRouter, Route, Switch, Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
 
@@ -17,29 +18,30 @@ class App extends Component {
                 <div className="container">
                     <Switch>
                         <Route exact path='/' component={Dashboard} />
+                        <Route exact path='/room' component={Room} />
                         <Route path='/signup' render={props=>(
-                            <AuthForm {...props} 
-                                signup={true} 
+                            <AuthForm {...props}
+                                signup={true}
                                 buttonText={"Signup"}
                                 header={"Join in with all the Fun!"}
                                 />
                         )} />
                         <Route path='/login' render={props=>(
-                            <AuthForm {...props} 
-                                signup={false} 
+                            <AuthForm {...props}
+                                signup={false}
                                 buttonText={"Signin"}
                                 header={"See what's going on!"}
                                 />
                         )} />
                         <Route path='/login' render={props=>(
-                            <AuthForm {...props} 
-                                signup={false} 
+                            <AuthForm {...props}
+                                signup={false}
                                 buttonText={"Signin"}
                                 header={"See what's going on!"}
                                 />
                         )} />
                         <Route path='/profile' render={props=>(
-                            isAuthenticated ? 
+                            isAuthenticated ?
                                 <Profile /> : <Redirect to="/login"/>
                         )} />
                         <Route path='/test' render={props=>(
