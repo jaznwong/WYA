@@ -1,34 +1,79 @@
 module.exports = (sequelize, DataTypes) => {
-  var Rooms = sequelize.define('Rooms', {
+  var Room = sequelize.define('Room', {
+    roomname: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+            notEmpty: true,
+        },
+    },
     /*
-    Planned Data Fields:
-    - Room Name
-    - Creator
-    - Users in Room
-        Array of User IDs
-    - isClosed
-        Boolean if room is letting more people join
-    - setVenue
-       Boolean if room has voted/agreed on venue
-    - Venue
-        Should hold venue name, venue address, venue type/interest (?)
-        Either array or JSON
-    - setSchedule
-        Boolean if time has been set => algorithm vs vote
-    - Schedule
-        Hold date & time period
-        Array/JSON
-    - isFinalized
-        Boolean if room creator approves event details
-        When true, finalizes event and event details can no longer be change
+    NOTE:
+    - Users and Rooms will define a Many-to-Many relationship
+    - A M-M relationship will ultimately involve a lot less overhead
+    when it comes to querying all the rooms for a user (such as displaing user's room in dash)
+    amd querying all users in a room (for displaying users in room)
+    - This necessitates field identified user id of creator
+    - This field will be used to validate
     */
-    name: DataTypes.TEXT,
-    isFinalized: DataTypes.BOOLEAN
+    creatorID: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+          notEmpty: true,
+      },
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    location: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    /*
+    Structure should look like:
+    {
+    Monday: {
+      0: 3,
+      15: 2,
+      20: 6
+    },
+    Wednesday: {
+      12: 5,
+      18: 1,
+      19: 3
+      }
+    }
+  }
+    */
+    availabilityTally: {
+        type: DataTypes.JSON,
+        allowNull: true
+    },
+    /*
+    Structure should look like:
+    {Sports: 4,
+    Music: 2}
+    */
+    interestTally: {
+        type: DataTypes.JSON,
+        allowNull: true
+    },
+    roomstatus: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        isIn: [['OPEN','CLOSED','VOTING','FINALIZED']]
+      }
+    }
   });
 
-  Rooms.associate = (models) => {
-    // associations can be defined here
+  Room.associate = (models) => {
+    models.User.belongsToMany(Room, {through: 'UserRoom'});
+    Room.belongsToMany(models.User, {through: 'UserRoom'});
   }
 
-  return Rooms;
+  return Room;
 };
