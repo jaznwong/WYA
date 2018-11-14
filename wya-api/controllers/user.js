@@ -74,4 +74,17 @@ Router.route('/availability')
         })
     })
 
+Router.route('/who_am_i')
+    .get(function(req, res, next){
+        isAuthenticated(req, res, function(user, err){
+            if(user){
+                res.status(200).json(user)
+            }else{
+                res.status(401).json({
+                    message: "no one"
+                })
+            }
+        })
+    })
+
 module.exports = Router
