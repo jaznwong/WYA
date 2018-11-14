@@ -12,7 +12,8 @@ export function createRoom(name, desc){
                 desc
             }).then((room)=>{
                 console.log("Room created")
-                console.log(room)
+                resolve(room)
+            }).catch(err=>{reject(err)})
             })
         })
     }
