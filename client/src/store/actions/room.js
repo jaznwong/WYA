@@ -14,6 +14,7 @@ export function createRoom(name, desc){
                 console.log("Room created")
                 resolve(room)
             }).catch(err=>{reject(err)})
+            })
         })
     }
 }

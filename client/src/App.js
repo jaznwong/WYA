@@ -8,8 +8,13 @@ import Test from './Test'
 import Room from './RoomForm'
 import {withRouter, Route, Switch, Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
+import {initiateUser} from './store/actions/auth'
 
 class App extends Component {
+    componentWillMount(){
+        this.props.initiateUser()
+    }
+
     render(){
         let {isAuthenticated} = this.props
         return(
@@ -61,5 +66,5 @@ function mapStateToProps(reduxState){
 }
 
 export default withRouter(
-    connect(mapStateToProps, null)(App)
+    connect(mapStateToProps, {initiateUser})(App)
 );
