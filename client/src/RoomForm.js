@@ -12,21 +12,22 @@ class Room extends Component {
   };
 }
 
-handleNameChange(event) {
-    this.setState({name: event.target.value});
-    console.log(this.state.name)
-  }
-
-handleDescriptionChange(event) {
-    this.setState({description: event.target.value});
-    console.log(this.state.description)
-  }
+handleChange(e){
+  this.setState({
+      [e.target.name]: e.target.value
+  })
+}
 
 handleClick = (e) =>{
+  e.preventDefault();
   let name = this.state.name;
   let description = this.state.description;
-  this.props.createRoom(name, description);
+  this.props.createRoom(name, description)
+  .catch(err=>{
+    console.log(description)
+  })
   console.log(name)
+
 }
 
   render(){
@@ -38,13 +39,13 @@ handleClick = (e) =>{
         <div className="form-group">
           <h2 style={{color:"white"}}> Room Name: </h2>
           <div style={{float:"center", width:"50%",marginLeft:"25%"}}>
-          <input className="form-control" type="text" value={this.state.value} onChange={this.handleNameChange.bind(this)} placeholder="Your room name"></input>
+          <input className="form-control" name="name" type="text" value={this.state.value} onChange={this.handleChange.bind(this)} placeholder="Your room name"></input>
           </div>
         </div>
         <div className="form-group">
         <h2 style={{color:"white"}}> Description: </h2>
         <div style={{float:"center", width:"50%",marginLeft:"25%"}}>
-          <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" value={this.state.value} onChange={this.handleDescriptionChange.bind(this)}></textarea>
+          <textarea className="form-control" name="description" id="exampleFormControlTextarea1" rows="3" value={this.state.value} onChange={this.handleChange.bind(this)}></textarea>
           <br></br>
             <button onClick={this.handleClick.bind(this)}>Save</button>
             <br></br>
