@@ -39,7 +39,7 @@ class Profile extends Component{
 
   handleTimeClick = () =>{
     let count = this.state.count
-    console.log(count)
+    // console.log(count)
     let timeComponents = this.state.timeComponents
     timeComponents.push(
       <div style={{float:"center", width:"16%",marginLeft:"41%"}}>
@@ -48,6 +48,7 @@ class Profile extends Component{
    <br></br>
    </div>)
    let time = this.state.time
+   console.log(time)
    time.push([0,0])
     this.setState({
       count: count + 1,
@@ -62,29 +63,16 @@ class Profile extends Component{
     let time = this.state.time
     time[index] = [data.start, data.end]
   }
-  /*
-  displayTimes(){
-    let times = [];
-    for(let i = 0; i < this.state.count; i++){
-      times.push;
-   }
-   return times;
- }*/
 
-  handleChange(e) {
-      this.setState({ value:[]});
-      let temp = [];
-      for(var i = 0; i < e.length; i++){
-          temp.push(e[i].key);
-      }
-    this.setState({ value: temp});
+  handleChange(selectedOption) {
+    let values = selectedOption.map((item)=>(item.value))
+    this.setState({ interests: values});
   }
 
     render(){
       let interests = this.props.suggestedInterests.map((item,key)=>(
         { value: item, label: item }
       ))
-      console.log(interests)
         return(
           <div style = {{textAlign: "center"}}>
           <div className="Jumbotron" style={{backgroundColor:"#9eadd1"}}>
