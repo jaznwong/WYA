@@ -87,6 +87,31 @@ Router.route('/:roomID')
         })
     })
 
+  Router.route('/:roomID/users')
+      .get(function(req, res, next){
+          isAuthenticated(req, res, function(user, err){
+              if(user){
+                  findById(req.params.roomID)
+                  .then((room) => {
+                      isUserInRoom(room, user.id)
+                      .then((isInRoom) => {
+                          if (isInRoom){
+                            getUsers(room)
+                            .then((users) => {
+                                res.json(users)
+                            })
+                            .catch((err) => {res.status(401).json(err.message)})
+                          }
+                          else res.status(403).json("Not Part of Room")
+                      })
+                      .catch((err) => {res.status(401).json(err.message)})
+                  })
+                  .catch((err) => {res.status(401).json(err.message)})
+              }
+              else res.status(401).json(err.message)
+          })
+      })
+
 /*
 // Expected Post Body:
 // req.body.roomname - STRING of roomname *REQUIRED*
