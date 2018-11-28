@@ -6,6 +6,7 @@ import Navbar from './Navbar'
 import Profile from './Profile'
 import Test from './Test'
 import Room from './RoomForm'
+import Roompage from './Room'
 import {withRouter, Route, Switch, Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {initiateUser} from './store/actions/auth'
@@ -23,7 +24,8 @@ class App extends Component {
                 <div className="container">
                     <Switch>
                         <Route exact path='/' component={Dashboard} />
-                        <Route exact path='/room' component={Room} />
+                        <Route exact path='/createroom' component={Room} />
+                        <Route exact path='/room' component={Roompage} />
                         <Route path='/signup' render={props=>(
                             <AuthForm {...props}
                                 signup={true}
