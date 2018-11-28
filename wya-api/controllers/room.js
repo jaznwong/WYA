@@ -10,6 +10,13 @@ let {
     isUserInRoom,
     deleteById
 } = require('../handlers/room')
+let {
+    findVote,
+    findVotes,
+    createVote,
+    deleteAllVotes,
+    deleteVoteById
+} = require('../handlers/vote')
 let isAuthenticated = require('../middlewares.js')
 
 // For debugging
@@ -199,6 +206,42 @@ Router.route('/join/:roomId')
                 findById(req.params.roomId)
                 .then((room) => {
                     addUser(room, user)
+                    .then((data) => {res.json(data)})
+                    .catch((err) => {res.status(401).json(err.message)})
+                })
+                .catch((err) => {res.status(401).json(err.message)})
+            }
+            else res.status(401).json(err.message)
+        })
+    })
+
+Router.route('/:roomId/vote')
+    .post(function(req, res, next){
+        isAuthenticated(req, res, function(user, err){
+            if(user){
+                findById(req.params.roomId)
+                .then((room) => {
+                    createVote({
+                      placename: req.params.placename,
+                      userId: user.id,
+                      roomId: room.id
+                    })
+                    .then((data) => {res.json(data)})
+                    .catch((err) => {res.status(401).json(err.message)})
+                })
+                .catch((err) => {res.status(401).json(err.message)})
+            }
+            else res.status(401).json(err.message)
+        })
+    })
+
+Router.route('/:roomId/votes')
+    .get(function(req, res, next){
+        isAuthenticated(req, res, function(user, err){
+            if(user){
+                findById(req.params.roomId)
+                .then((room) => {
+                    findVotes(room.id)
                     .then((data) => {res.json(data)})
                     .catch((err) => {res.status(401).json(err.message)})
                 })
