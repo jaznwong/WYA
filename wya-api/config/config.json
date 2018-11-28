@@ -19,5 +19,8 @@
     "database": "APP_production",
     "host": "127.0.0.1",
     "dialect": "postgresql"
+  },
+  "services": {
+    "yelpAPI": "wFS09ZcVcS4mS3_HOllSEtTDKGfLEb83y3Ta5VPkk6NEe0nT9TyAsYF4CyQPqb95MJ9WkdaP_WgoRXtPSEZiSt-3irSTzQxiYA1pbzHtdaesTzfnBH_EpVLoXJDxW3Yx"
   }
 }
