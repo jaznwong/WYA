@@ -3,9 +3,9 @@ module.exports = (sequelize, DataTypes) => {
     /*
     TEMP, will not need
     */
-    placename: {
-      type: DataTypes.TEXT,
-      allowNull: true
+    votedFor: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
     }
   });
 

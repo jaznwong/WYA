@@ -58,7 +58,7 @@ let createVote = async function (params) {
     catch(err){
         if (err.message) return err
         else{
-            let vote = await Vote.create({placename: params.placename})
+            let vote = await Vote.create({votedFor: params.votedFor})
             .then((vote) => {
               vote.setUser(params.userId)
               .then((vote) => {
@@ -86,6 +86,27 @@ let createVote = async function (params) {
 let deleteAllVotes = async function(){
     try{
         await Vote.destroy({where: {}})
+        return
+    }catch(error){
+        throw {message: "Unable to delete all rooms"}
+    }
+}
+
+
+/**
+ * Used to delete all Votes of a Room
+ * @param {*} params
+ */
+let deleteAllVotesOfRoom = async function(roomId){
+    try{
+        await Vote.destroy({
+            include:[
+                {
+                    model: Room,
+                    where: {id: roomId}
+                }
+            ]
+        })
         return
     }catch(error){
         throw {message: "Unable to delete all rooms"}

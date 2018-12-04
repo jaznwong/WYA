@@ -95,30 +95,72 @@ Router.route('/:roomID')
         })
     })
 
-  Router.route('/:roomID/users')
-      .get(function(req, res, next){
-          isAuthenticated(req, res, function(user, err){
-              if(user){
-                  findById(req.params.roomID)
-                  .then((room) => {
-                      isUserInRoom(room, user.id)
-                      .then((isInRoom) => {
-                          if (isInRoom){
-                            getUsers(room)
-                            .then((users) => {
-                                res.json(users)
-                            })
-                            .catch((err) => {res.status(401).json(err.message)})
-                          }
-                          else res.status(403).json("Not Part of Room")
-                      })
-                      .catch((err) => {res.status(401).json(err.message)})
-                  })
-                  .catch((err) => {res.status(401).json(err.message)})
-              }
-              else res.status(401).json(err.message)
-          })
-      })
+Router.route('/:roomID/users')
+    .get(function(req, res, next){
+        isAuthenticated(req, res, function(user, err){
+            if(user){
+                findById(req.params.roomID)
+                .then((room) => {
+                    isUserInRoom(room, user.id)
+                    .then((isInRoom) => {
+                        if (isInRoom){
+                          getUsers(room)
+                          .then((users) => {
+                              res.json(users)
+                          })
+                          .catch((err) => {res.status(401).json(err.message)})
+                        }
+                        else res.status(403).json("Not Part of Room")
+                    })
+                    .catch((err) => {res.status(401).json(err.message)})
+                })
+                .catch((err) => {res.status(401).json(err.message)})
+            }
+            else res.status(401).json(err.message)
+        })
+    })
+
+Router.route('/:roomID/suggestion')
+    .get(function(req, res, next){
+        isAuthenticated(req, res, function(user, err){
+            if(user){
+                findById(req.params.roomID)
+                .then((room) => {
+                    isUserInRoom(room, user.id)
+                    .then((isInRoom) => {
+                        if (isInRoom){
+                          res.json(room.location)
+                        }
+                        else res.status(403).json("Not Part of Room")
+                    })
+                    .catch((err) => {res.status(401).json(err.message)})
+                })
+                .catch((err) => {res.status(401).json(err.message)})
+            }
+            else res.status(401).json(err.message)
+        })
+    })
+
+Router.route('/:roomID/status')
+    .get(function(req, res, next){
+        isAuthenticated(req, res, function(user, err){
+            if(user){
+                findById(req.params.roomID)
+                .then((room) => {
+                    isUserInRoom(room, user.id)
+                    .then((isInRoom) => {
+                        if (isInRoom){
+                          res.json(room.roomstatus)
+                        }
+                        else res.status(403).json("Not Part of Room")
+                    })
+                    .catch((err) => {res.status(401).json(err.message)})
+                })
+                .catch((err) => {res.status(401).json(err.message)})
+            }
+            else res.status(401).json(err.message)
+        })
+    })
 
 /*
 // Expected Post Body:
@@ -241,7 +283,7 @@ Router.route('/:roomId/initiate_vote')
                         location: event[0],
                         roomstatus: 'VOTING'
                       })
-                      .then(() => {res.status(200).json(user.dataValues.availability)})
+                      .then((room) => {res.status(200).json(room)})
                       .catch((err) => {res.status(401).json(err)})
                     })
                     .catch((err) => {res.status(401).json("Room is cannot be set to voting")})
@@ -261,8 +303,10 @@ Router.route('/:roomId/vote')
                 findById(req.params.roomId)
                 .then((room) => {
                   if (room.roomstatus == 'VOTING'){
+                    let votedFor = true;
+                    if (req.body.votedFor == 'false') votedFor = false;
                     createVote({
-                      placename: req.body.placename,
+                      votedFor: votedFor,
                       userId: user.id,
                       roomId: room.id
                     })
