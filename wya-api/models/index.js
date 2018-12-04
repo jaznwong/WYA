@@ -28,6 +28,9 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+//sequelize.queryInterface.dropAllTables()
+
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

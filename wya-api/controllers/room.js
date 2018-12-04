@@ -10,7 +10,15 @@ let {
     isUserInRoom,
     deleteById
 } = require('../handlers/room')
+let {
+    findVote,
+    findVotes,
+    createVote,
+    deleteAllVotes,
+    deleteVoteById
+} = require('../handlers/vote')
 let isAuthenticated = require('../middlewares.js')
+let yelp = require('../services/yelp')
 
 // For debugging
 Router.route('/')
@@ -87,30 +95,72 @@ Router.route('/:roomID')
         })
     })
 
-  Router.route('/:roomID/users')
-      .get(function(req, res, next){
-          isAuthenticated(req, res, function(user, err){
-              if(user){
-                  findById(req.params.roomID)
-                  .then((room) => {
-                      isUserInRoom(room, user.id)
-                      .then((isInRoom) => {
-                          if (isInRoom){
-                            getUsers(room)
-                            .then((users) => {
-                                res.json(users)
-                            })
-                            .catch((err) => {res.status(401).json(err.message)})
-                          }
-                          else res.status(403).json("Not Part of Room")
-                      })
-                      .catch((err) => {res.status(401).json(err.message)})
-                  })
-                  .catch((err) => {res.status(401).json(err.message)})
-              }
-              else res.status(401).json(err.message)
-          })
-      })
+Router.route('/:roomID/users')
+    .get(function(req, res, next){
+        isAuthenticated(req, res, function(user, err){
+            if(user){
+                findById(req.params.roomID)
+                .then((room) => {
+                    isUserInRoom(room, user.id)
+                    .then((isInRoom) => {
+                        if (isInRoom){
+                          getUsers(room)
+                          .then((users) => {
+                              res.json(users)
+                          })
+                          .catch((err) => {res.status(401).json(err.message)})
+                        }
+                        else res.status(403).json("Not Part of Room")
+                    })
+                    .catch((err) => {res.status(401).json(err.message)})
+                })
+                .catch((err) => {res.status(401).json(err.message)})
+            }
+            else res.status(401).json(err.message)
+        })
+    })
+
+Router.route('/:roomID/suggestion')
+    .get(function(req, res, next){
+        isAuthenticated(req, res, function(user, err){
+            if(user){
+                findById(req.params.roomID)
+                .then((room) => {
+                    isUserInRoom(room, user.id)
+                    .then((isInRoom) => {
+                        if (isInRoom){
+                          res.json(room.location)
+                        }
+                        else res.status(403).json("Not Part of Room")
+                    })
+                    .catch((err) => {res.status(401).json(err.message)})
+                })
+                .catch((err) => {res.status(401).json(err.message)})
+            }
+            else res.status(401).json(err.message)
+        })
+    })
+
+Router.route('/:roomID/status')
+    .get(function(req, res, next){
+        isAuthenticated(req, res, function(user, err){
+            if(user){
+                findById(req.params.roomID)
+                .then((room) => {
+                    isUserInRoom(room, user.id)
+                    .then((isInRoom) => {
+                        if (isInRoom){
+                          res.json(room.roomstatus)
+                        }
+                        else res.status(403).json("Not Part of Room")
+                    })
+                    .catch((err) => {res.status(401).json(err.message)})
+                })
+                .catch((err) => {res.status(401).json(err.message)})
+            }
+            else res.status(401).json(err.message)
+        })
+    })
 
 /*
 // Expected Post Body:
@@ -198,13 +248,92 @@ Router.route('/join/:roomId')
             if(user){
                 findById(req.params.roomId)
                 .then((room) => {
+                  if (room.roomstatus == 'OPEN'){
                     addUser(room, user)
                     .then((data) => {res.json(data)})
                     .catch((err) => {res.status(401).json(err.message)})
+                  }
+                  else res.status(401).json("Room is not Open")
                 })
                 .catch((err) => {res.status(401).json(err.message)})
             }
             else res.status(401).json(err.message)
+        })
+    })
+
+Router.route('/:roomId/initiate_vote')
+    .post(function(req, res, next){
+        isAuthenticated(req, res, function(user, err){
+            if(user){
+                findById(req.params.roomId)
+                .then((room) => {
+                  if (room.creatorID == user.id && room.roomstatus == 'OPEN'){
+                    /*
+                    should get a single event from the yelp api based on common interests.
+                    * save the suggested event in the database
+                    * should set room status to voting
+                    */
+                    //For now, interest of event will be based on creators first interest
+                    let interest = 'Bars';
+                    if(user.interests != null && user.interests.length >=1 ) interest = user.interest[0];
+                    console.log(yelp.yelp.search)
+                    yelp.yelp.search('New York City', interest, 4)
+                    .then((event) => {
+                      room.update({
+                        location: event[0],
+                        roomstatus: 'VOTING'
+                      })
+                      .then((room) => {res.status(200).json(room)})
+                      .catch((err) => {res.status(401).json(err)})
+                    })
+                    .catch((err) => {res.status(401).json("Room is cannot be set to voting")})
+                  }
+                  else res.status(401).json("Room is cannot be set to voting")
+                })
+                .catch((err) => {res.status(401).json(err)})
+            }
+            else res.status(401).json(err.message)
+        })
+    })
+
+Router.route('/:roomId/vote')
+    .post(function(req, res, next){
+        isAuthenticated(req, res, function(user, err){
+            if(user){
+                findById(req.params.roomId)
+                .then((room) => {
+                  if (room.roomstatus == 'VOTING'){
+                    let votedFor = true;
+                    if (req.body.votedFor == 'false') votedFor = false;
+                    createVote({
+                      votedFor: votedFor,
+                      userId: user.id,
+                      roomId: room.id
+                    })
+                    .then((data) => {res.json(data)})
+                    .catch((err) => {res.status(401).json(err)})
+                  }
+                  else res.status(401).json("Room is not Voting")
+                })
+                .catch((err) => {res.status(401).json(err)})
+            }
+            else res.status(401).json(err.message)
+        })
+    })
+
+Router.route('/:roomId/votes')
+    .get(function(req, res, next){
+        isAuthenticated(req, res, function(user, err){
+            if(user){
+                findById(req.params.roomId)
+                .then((room) => {
+                    findVotes(room.id)
+                    .then((data) => {res.json(data)})
+                    .catch((err) => {res.status(401).json(err)})
+                })
+                .catch((err) => {res.status(401).json(err)})
+            }
+            else res.status(401).json(err)
         })
     })
 
