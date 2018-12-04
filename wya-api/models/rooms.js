@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     location: {
-      type: DataTypes.STRING,
+      type: DataTypes.JSON,
       allowNull: true
     },
     /*

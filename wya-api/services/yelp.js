@@ -9,7 +9,7 @@ const yelpHandler = {
 /**
  * @param  {string} location - Location for the event
  * @param  {string} category - Categories to search for
- * @param  {int} price - 1: $ , 2: $$, 3: $$$, 4: $$$
+ * @param  {int} price - 1: $ , 2: $$, 3: $$$, 4: $$$$
  * @param  {int} openAt - (Optional)unix time
  * @returns {promise} (array)businesses - each entry is a business object with the following keys
         [ 'id',
@@ -38,9 +38,10 @@ yelpHandler.search = async function(location, category,  price, openAt=""){
     if(openAt != ""){
         params.open_at = openAt
     }
-
+    console.log(params)
     try{
         let response = await this.client.search(params)
+        console.log(response)
         return response.jsonBody.businesses
     }catch(err){
         throw err

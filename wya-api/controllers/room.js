@@ -18,6 +18,7 @@ let {
     deleteVoteById
 } = require('../handlers/vote')
 let isAuthenticated = require('../middlewares.js')
+let yelp = require('../services/yelp')
 
 // For debugging
 Router.route('/')
@@ -205,11 +206,49 @@ Router.route('/join/:roomId')
             if(user){
                 findById(req.params.roomId)
                 .then((room) => {
+                  if (room.roomstatus == 'OPEN'){
                     addUser(room, user)
                     .then((data) => {res.json(data)})
                     .catch((err) => {res.status(401).json(err.message)})
+                  }
+                  else res.status(401).json("Room is not Open")
                 })
                 .catch((err) => {res.status(401).json(err.message)})
+            }
+            else res.status(401).json(err.message)
+        })
+    })
+
+Router.route('/:roomId/initiate_vote')
+    .post(function(req, res, next){
+        isAuthenticated(req, res, function(user, err){
+            if(user){
+                findById(req.params.roomId)
+                .then((room) => {
+                  if (room.creatorID == user.id && room.roomstatus == 'OPEN'){
+                    /*
+                    should get a single event from the yelp api based on common interests.
+                    * save the suggested event in the database
+                    * should set room status to voting
+                    */
+                    //For now, interest of event will be based on creators first interest
+                    let interest = 'Bars';
+                    if(user.interests != null && user.interests.length >=1 ) interest = user.interest[0];
+                    console.log(yelp.yelp.search)
+                    yelp.yelp.search('New York City', interest, 4)
+                    .then((event) => {
+                      room.update({
+                        location: event[0],
+                        roomstatus: 'VOTING'
+                      })
+                      .then(() => {res.status(200).json(user.dataValues.availability)})
+                      .catch((err) => {res.status(401).json(err)})
+                    })
+                    .catch((err) => {res.status(401).json("Room is cannot be set to voting")})
+                  }
+                  else res.status(401).json("Room is cannot be set to voting")
+                })
+                .catch((err) => {res.status(401).json(err)})
             }
             else res.status(401).json(err.message)
         })
@@ -221,15 +260,18 @@ Router.route('/:roomId/vote')
             if(user){
                 findById(req.params.roomId)
                 .then((room) => {
+                  if (room.roomstatus == 'VOTING'){
                     createVote({
-                      placename: req.params.placename,
+                      placename: req.body.placename,
                       userId: user.id,
                       roomId: room.id
                     })
                     .then((data) => {res.json(data)})
-                    .catch((err) => {res.status(401).json(err.message)})
+                    .catch((err) => {res.status(401).json(err)})
+                  }
+                  else res.status(401).json("Room is not Voting")
                 })
-                .catch((err) => {res.status(401).json(err.message)})
+                .catch((err) => {res.status(401).json(err)})
             }
             else res.status(401).json(err.message)
         })
@@ -243,11 +285,11 @@ Router.route('/:roomId/votes')
                 .then((room) => {
                     findVotes(room.id)
                     .then((data) => {res.json(data)})
-                    .catch((err) => {res.status(401).json(err.message)})
+                    .catch((err) => {res.status(401).json(err)})
                 })
-                .catch((err) => {res.status(401).json(err.message)})
+                .catch((err) => {res.status(401).json(err)})
             }
-            else res.status(401).json(err.message)
+            else res.status(401).json(err)
         })
     })
 
