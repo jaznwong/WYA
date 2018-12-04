@@ -12,9 +12,13 @@ class SearchForm extends Component{
     render(){
         return (
             <form className="form my-3">
-                <div className="row">
-                    <div className="col-10"><input type="text" className="form-control" id="searchRooms" placeholder="Search Room"/></div>
-                    <div className="col-2"><button type="submit" className="btn btn-light mb-2 btn-block" onClick={this.handleSearch.bind(this)}>Search</button></div>
+                <div className="row" style={{background:"#ADD8E6", height:"100px"}}>
+                    <div className="col-10"><input type="text" className="form-control" id="searchRooms" placeholder="Search Room" style={{marginTop:"20px"}}/></div>
+                    <div className="col-2"><button type="submit" className="btn btn-light mb-2 btn-block" onClick={this.handleSearch.bind(this)} style={{marginTop:"20px"}}>Search</button></div>
+                </div>
+                <br/>
+                <div className="row" style={{background:"#E6E6FA", height:"500px"}}>
+                <h1>Results Go here...</h1>
                 </div>
             </form>
         )

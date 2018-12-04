@@ -32,22 +32,26 @@ handleClick = (e) =>{
 
   render(){
     return(
-      <div style = {{textAlign: "center"}}>
-      <div className="Jumbotron Jumbotron-fluid" style={{backgroundColor:"#9eadd1"}}>
+          <div style = {{textAlign: "center"}}>
+        <div className="Jumbotron Jumbotron-fluid" style={{height:"150px", backgroundColor:"#ADD8E6"}}>
+        <h1 className="display-4">Create a Room</h1>
+        </div>
+
+      <div className="Jumbotron Jumbotron-fluid" style={{height:"500px", backgroundColor:"#ADD8E6"}}>
       <div className="container">
       <form>
         <div className="form-group">
-          <h2 style={{color:"white"}}> Room Name: </h2>
+          <h3 style={{color:"black"}}> Room Name: </h3>
           <div style={{float:"center", width:"50%",marginLeft:"25%"}}>
           <input className="form-control" name="name" type="text" value={this.state.value} onChange={this.handleChange.bind(this)} placeholder="Your room name"></input>
           </div>
         </div>
         <div className="form-group">
-        <h2 style={{color:"white"}}> Description: </h2>
+        <h3 style={{color:"black"}}> Description: </h3>
         <div style={{float:"center", width:"50%",marginLeft:"25%"}}>
           <textarea className="form-control" name="description" id="exampleFormControlTextarea1" rows="3" value={this.state.value} onChange={this.handleChange.bind(this)}></textarea>
           <br></br>
-            <button onClick={this.handleClick.bind(this)}>Save</button>
+            <button type="button" class="btn btn-primary btn-lg" style={{background:"black"}} onClick={this.handleClick.bind(this)}>Create Room</button>
             <br></br>
           </div>
         </div>

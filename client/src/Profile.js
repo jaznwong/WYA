@@ -42,7 +42,7 @@ class Profile extends Component{
     console.log(count)
     let timeComponents = this.state.timeComponents
     timeComponents.push(
-      <div style={{float:"center", width:"16%",marginLeft:"41%"}}>
+      <div style={{float:"center", width:"17%",marginLeft:"41%"}}>
       <DatetimeRangePicker onChange={(e) => {this.what(e,count)}}
       timeFormat= "hh:mm a"/>
    <br></br>
@@ -87,8 +87,13 @@ class Profile extends Component{
       console.log(interests)
         return(
           <div style = {{textAlign: "center"}}>
-          <div className="Jumbotron" style={{backgroundColor:"#9eadd1"}}>
-              <h2 style={{color:"white"}}> What are your interests? </h2>
+
+          <div className="Jumbotron Jumbotron-fluid" style={{height:"150px", backgroundColor:"#E6E6FA"}}>
+          <h1 className="display-4">Set Up Your Profile</h1>
+          </div>
+
+          <div className="Jumbotron" style={{height:"1000px", backgroundColor:"#E6E6FA"}}>
+              <h3 style={{color:"black"}}> What are your interests? </h3>
               <div className="FormGroup" >
               <div className="Row show-grid">
                  <div className="Col" md={12} sm={12}>
@@ -106,15 +111,15 @@ class Profile extends Component{
               </div>
               </div>
               <br></br>
-              <h2 style={{color:"white"}}> What times are you available? </h2>
+              <h3 style={{color:"black"}}> What times are you available? </h3>
               <times>
               {this.state.timeComponents}
               </times>
              <br></br>
-           <button onClick={this.handleTimeClick.bind(this)}>Add time</button>
+           <button type="button" class="btn btn-info" onClick={this.handleTimeClick.bind(this)}>Add time</button>
              <br></br>
              <br></br>
-          <button onClick={this.handleClick.bind(this)}>Save</button>
+          <button type="button" class="btn btn-primary btn-lg" style={{background:"black"}} onClick={this.handleClick.bind(this)}>Save</button>
           </div>
           </div>
         )
