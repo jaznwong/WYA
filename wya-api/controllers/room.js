@@ -8,15 +8,15 @@ let {
     addUser,
     getUsers,
     isUserInRoom,
-    deleteById,
-    canBeAccepted
+    deleteById
 } = require('../handlers/room')
 let {
     findVote,
     findVotes,
     createVote,
     deleteAllVotes,
-    deleteVoteById
+    deleteVoteById,
+    canBeAccepted
 } = require('../handlers/vote')
 let isAuthenticated = require('../middlewares.js')
 let yelp = require('../services/yelp')
@@ -355,7 +355,7 @@ Router.route('/:roomId/votes')
                       let accepted = true;
                       if (req.body.accepted == 'false') votedFor = false;
                       if (accepted){
-                          room.getUsers();
+                          room.getUsers()
                           .then((users) => {
                               canBeAccepted(room.id, users.length)
                               .then((accepted) => {
@@ -363,6 +363,7 @@ Router.route('/:roomId/votes')
                                       room.update({
                                         roomstatus: 'FINALIZED'
                                       })
+                                      res.json('Accepted!')
                                   }
                                   else res.json('Cannot Be Accepted')
                               })

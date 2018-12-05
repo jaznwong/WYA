@@ -44,6 +44,7 @@ let findVotes = async function (roomId) {
 };
 
 let canBeAccepted = async function (roomId, numInRoom) {
+    console.log(numInRoom)
     try {
         let votes = await Vote.findAll({
           include:[
@@ -54,21 +55,22 @@ let canBeAccepted = async function (roomId, numInRoom) {
         });
         if (votes) {
           if (votes.length == numInRoom){
-            let accepted = await Vote.findAll({
+            let votedFor = await Vote.findAll({
                 where: {
                     RoomId: roomId,
-                    accepted: true
+                    votedFor: true
                 },
                 include:[
                     {model: Room}
                 ]
             })
-            if ( ((accepted.length * 1.0) / (votes.length * 1.0 )) >= .6 ) return true;
+            if ( ((votedFor.length * 1.0) / (votes.length * 1.0 )) >= .6 ) return true;
           }
           return false;
         }
         else throw `Could not find Votes`;
     } catch (err) {
+        console.log(err)
         throw `Could not find Votes`;
     }
 };
