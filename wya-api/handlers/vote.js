@@ -43,6 +43,35 @@ let findVotes = async function (roomId) {
     }
 };
 
+let canBeAccepted = async function (roomId, numInRoom) {
+    try {
+        let votes = await Vote.findAll({
+          include:[
+          {
+            model: Room,
+            where: {id: roomId}
+          }]
+        });
+        if (votes) {
+          if (votes.length == numInRoom){
+            let accepted = await Vote.findAll({
+                where: {
+                    RoomId: roomId,
+                    accepted: true
+                },
+                include:[
+                    {model: Room}
+                ]
+            })
+            if ( ((accepted.length * 1.0) / (votes.length * 1.0 )) >= .6 ) return true;
+          }
+          return false;
+        }
+        else throw `Could not find Votes`;
+    } catch (err) {
+        throw `Could not find Votes`;
+    }
+};
 
 /**
  * Creates an Vote on the database
@@ -127,5 +156,6 @@ module.exports = {
     findVotes,
     createVote,
     deleteAllVotes,
-    deleteVoteById
+    deleteVoteById,
+    canBeAccepted
 }
