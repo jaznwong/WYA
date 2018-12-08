@@ -7,7 +7,7 @@ const initialState = {
         ],
     userData: {},
     // TODO: Should be false by default
-    isAuthenticated: true,
+    isAuthenticated: false,
 }
 
 export default (state=initialState, action)=>{

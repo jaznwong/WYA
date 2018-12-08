@@ -1,4 +1,4 @@
-import {ROOT_API} from '../const'
+import {ROOT_API} from '../constants'
 import axios from 'axios'
 axios.defaults.withCredentials = true;
 

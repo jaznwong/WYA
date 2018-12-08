@@ -1,10 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import {
-  handleSuggestInterests,
-  postInterests,
-  postAvailablity
-} from "./store/actions/user";
 import {Card, CardBody, CardImg, CardText, CardTitle, Button} from 'reactstrap'
 
 const UserCard = function({ name }) {
@@ -37,11 +31,6 @@ const EventInfo = function({name, image_url, cateogry, price, location, descript
     displayPrice += "$"
   }
   return (
-    // <div className="row" style={{ height: "150%" }}>
-    //   <div className="col">
-    //     <h1>I am here</h1>
-    //   </div>
-    // </div>
     <Card>
       <CardImg
         top

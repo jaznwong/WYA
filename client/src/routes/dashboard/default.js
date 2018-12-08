@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import SearchForm from './components/dashboard/SearchForm'
-import SearchedRoomsList from './components/dashboard/SearchedRoomsList'
+import SearchForm from '../../components/dashboard/SearchForm'
+import SearchedRoomsList from '../../components/dashboard/SearchedRoomsList'
 
 const Headline = function({firstName, eventToday}){
     return(
@@ -13,8 +13,7 @@ const Headline = function({firstName, eventToday}){
     )
 }
 
-class Dashboard extends Component{
-
+class Default extends Component{
     render(){
         return (
             <div>
@@ -34,4 +33,4 @@ function mapStateToProps(reduxState){
     }
 }
 
-export default connect(mapStateToProps, null)(Dashboard)
+export default connect(mapStateToProps, null)(Default)
