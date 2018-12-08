@@ -1,72 +1,49 @@
-import React, { Component } from 'react';
-import './App.css';
-import Dashboard from './Dashboard'
-import AuthForm from './components/AuthForm'
-import Navbar from './Navbar'
-import Profile from './Profile'
-import Test from './Test'
-import Room from './RoomForm'
-import Roompage from './Room'
-import {withRouter, Route, Switch, Redirect} from 'react-router-dom'
-import {connect} from 'react-redux'
-import {initiateUser} from './store/actions/auth'
+import React, { Component } from "react";
+import Navbar from "./components/nav/Navbar";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { initiateUser } from "./store/actions/auth";
+import Main from "./routes";
 
 class App extends Component {
-    componentWillMount(){
-        this.props.initiateUser()
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false
+    };
+  }
 
-    render(){
-        let {isAuthenticated} = this.props
-        return(
-            <div>
-                <Navbar />,
-                <div className="container">
-                    <Switch>
-                        <Route exact path='/' component={Dashboard} />
-                        <Route exact path='/createroom' component={Room} />
-                        <Route exact path='/room' component={Roompage} />
-                        <Route path='/signup' render={props=>(
-                            <AuthForm {...props}
-                                signup={true}
-                                buttonText={"Signup"}
-                                header={"Join in with all the Fun!"}
-                                />
-                        )} />
-                        <Route path='/login' render={props=>(
-                            <AuthForm {...props}
-                                signup={false}
-                                buttonText={"Signin"}
-                                header={"See what's going on!"}
-                                />
-                        )} />
-                        <Route path='/login' render={props=>(
-                            <AuthForm {...props}
-                                signup={false}
-                                buttonText={"Signin"}
-                                header={"See what's going on!"}
-                                />
-                        )} />
-                        <Route path='/profile' render={props=>(
-                            isAuthenticated ?
-                                <Profile /> : <Redirect to="/login"/>
-                        )} />
-                        <Route path='/test' render={props=>(
-                            <Test {...props} />
-                        )} />
-                    </Switch>
-                </div>
+  componentWillMount() {
+    this.setState({
+      loading: true
+    });
+
+    this.props.initiateUser().finally(() => {
+      this.setState({
+        loading: false
+      });
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        {!this.state.loading && (
+          <div>
+            <Navbar />
+            <div id="main" className="container">
+              <Main />
             </div>
-        )
-    }
-}
-
-function mapStateToProps(reduxState){
-    return{
-        isAuthenticated: reduxState.user.isAuthenticated
-    }
+          </div>
+        )}
+      </div>
+    );
+  }
 }
 
 export default withRouter(
-    connect(mapStateToProps, {initiateUser})(App)
+  connect(
+    null,
+    { initiateUser }
+  )(App)
 );

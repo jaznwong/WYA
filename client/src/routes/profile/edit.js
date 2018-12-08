@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {handleSuggestInterests, postInterests, postAvailablity} from './store/actions/user'
+import {handleSuggestInterests, postInterests, postAvailablity} from '../../store/actions/user'
 import Select from 'react-select'
 import DatetimeRangePicker from 'react-datetime-range-picker'
 
-class Profile extends Component{
+class EditProfile extends Component{
     /** Dcoumentation
     *       - Access suggested interests through this.props.suggestedInterests
     *       - Post user interests to the database by running, this.props.postInterests(interests)
@@ -92,7 +92,7 @@ class Profile extends Component{
           <h1 className="display-4">Set Up Your Profile</h1>
           </div>
 
-          <div className="Jumbotron" style={{height:"1000px", backgroundColor:"#E6E6FA"}}>
+          <div className="Jumbotron" style={{backgroundColor:"#E6E6FA"}}>
               <h3 style={{color:"black"}}> What are your interests? </h3>
               <div className="FormGroup" >
               <div className="Row show-grid">
@@ -142,4 +142,4 @@ function mapDispatchToProps(dispatch){
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile)
+export default connect(mapStateToProps, mapDispatchToProps)(EditProfile)

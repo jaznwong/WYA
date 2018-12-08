@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {authUser} from '../store/actions/auth'
+import {authUser} from '../../store/actions/auth'
 import {connect} from 'react-redux'
 
 class AuthForm extends Component{

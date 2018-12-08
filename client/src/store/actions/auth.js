@@ -38,9 +38,11 @@ export function initiateUser() {
             server.get(url)
                 .then((user) => {
                     dispatch(authUserAction(user))
+                    resolve()
                 })
                 .catch(err => {
                     console.log("Unauthorized")
+                    reject()
                 })
         })
     }
