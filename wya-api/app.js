@@ -8,6 +8,9 @@ const errorHandler = require('./handlers/error')
 const PORT = process.env.PORT || 8000;
 
 const app = express();
+const http = require('http').Server(app)
+const socket = require('./controllers/socket')(http)
+
 const origin = process.env.ORIGIN || "http://localhost:3000"
 
 // Cors
@@ -52,7 +55,7 @@ models.sequelize.sync({
     force: false
   })
   .then(() => {
-    app.listen(PORT, () => {
+    http.listen(PORT, () => {
       console.log(`Server is up and running on port: ${PORT}`)
     });
   });

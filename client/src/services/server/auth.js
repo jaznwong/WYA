@@ -16,7 +16,7 @@ export async function signup(firstname, lastname, username, password) {
 
 export async function login(username, password){
     try{
-        return await post(`${BASE}/signup`, {
+        return await post(`${BASE}/login`, {
           username,
           password,
         });

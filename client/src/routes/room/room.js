@@ -7,7 +7,7 @@ import UserCard from "../../components/cards/userCard";
 import { joinRoom } from "../../services/server/room";
 import EventInfo from "../../components/cards/EventInfo";
 import { initiateRoom } from "../../store/actions/room";
-import MessageList from '../../components/lists/messageList'
+import MessageList from "../../components/lists/messageList";
 
 const UserList = function({ userlist }) {
   let users = userlist.map((user, index) => {
@@ -38,8 +38,15 @@ class RoomPage extends Component {
   }
 
   componentDidMount() {
-    this.props.initiateRoom()(this.props.match.params.roomID).then(() => {
-    })
+    this.props
+      .initiateRoom()(this.props.match.params.roomID)
+      .then(() => {
+        this.props.socket.emit("joinRoom", this.props.match.params.roomID);
+      });
+  }
+
+  componentWillUnmount(){
+    this.props.socket.emit('leaveRoom')
   }
 
   render() {
@@ -56,17 +63,18 @@ class RoomPage extends Component {
           <Col className="col position-static">
             {/* name, image_url, cateogry, price, location */}
             {this.props.state == "OPEN" ? (
-            <MessageList />) : 
-            (<EventInfo
-              name={"Tasty Hand-Pulled Noodles"}
-              image_url={
-                "https://s3-media3.fl.yelpcdn.com/bphoto/on5kwb77QO9cS78kxllnOA/o.jpg"
-              }
-              cateogry="American"
-              price={4}
-              location="1 Doyers St New York, NY 10013"
-              description={this.props.description}
-            />
+              <MessageList socket={this.props.socket}/>
+            ) : (
+              <EventInfo
+                name={"Tasty Hand-Pulled Noodles"}
+                image_url={
+                  "https://s3-media3.fl.yelpcdn.com/bphoto/on5kwb77QO9cS78kxllnOA/o.jpg"
+                }
+                cateogry="American"
+                price={4}
+                location="1 Doyers St New York, NY 10013"
+                description={this.props.description}
+              />
             )}
           </Col>
         </Row>
@@ -78,6 +86,7 @@ class RoomPage extends Component {
 function mapStateToProps(reduxState) {
   return {
     self: reduxState.user.userData,
+    socket: reduxState.global.socket,
     ...reduxState.room
   };
 }
