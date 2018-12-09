@@ -1,8 +1,12 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {searchRooms} from '../../store/actions/user'
+import {searchRooms} from '../../store/actions/dashboard'
 
 class SearchForm extends Component{
+    componentDidMount(){
+        this.props.searchRooms("")
+    }
+
     handleSearch(event){
         event.preventDefault()
         let query = document.getElementById('searchRooms').value

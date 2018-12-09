@@ -1,60 +1,69 @@
-import {AUTH_USER, LOGOUT} from '../actionTypes'
-import {server} from '../../services/api'
+import { AUTH_USER, LOGOUT } from "../actionTypes";
+import { signup, login, logout as logUserOut } from "../../services/server/auth";
+import {whoAmI} from '../../services/server/user'
 
-function authUserAction(userData){
-    return{
-        type: AUTH_USER,
-        userData
-    }
+function authUserAction(userData) {
+  return {
+    type: AUTH_USER,
+    userData
+  };
 }
 
 // Login or Register
-export function authUser(signup, username, password){
-    let route = "/auth/" + (signup ? "signup" : "login");
-    let data = {
-        username,
-        password
-    }
-    return dispatch =>{
-        return new Promise((resolve, reject)=>{
-            server.post(route, data)
-                .then(res=>{
-                    let {user} = res.data
-                    dispatch(authUserAction(user))
-                    resolve()
-                })       
-                .catch(err=>{
-                    reject(err)
-                })
+export function loginUser(username, password) {
+  return dispatch => {
+    return new Promise((resolve, reject) => {
+      login(username, password)
+        .then(res => {
+          let { user } = res.data;
+          dispatch(authUserAction(user));
+          resolve();
         })
-    }
+        .catch(err => {
+          reject(err);
+        });
+    });
+  };
+}
+
+export function signupUser(firstname, lastName, username, password){
+  return dispatch => {
+    return new Promise((resolve, reject) => {
+      signup(firstname, lastName, username, password)
+        .then(res => {
+          let { user } = res.data;
+          dispatch(authUserAction(user));
+          resolve();
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  };
 }
 
 export function initiateUser() {
-    console.log("Initiating user")
-    return dispatch => {
-        return new Promise((resolve, reject) => {
-            let url = "/user/who_am_i"
-            server.get(url)
-                .then((user) => {
-                    dispatch(authUserAction(user))
-                    resolve()
-                })
-                .catch(err => {
-                    console.log("Unauthorized")
-                    reject()
-                })
+  return dispatch => {
+    return new Promise((resolve, reject) => {
+      whoAmI()
+      .then(user => {
+          // console.log(user)
+          dispatch(authUserAction(user));
+          resolve();
         })
-    }
+        .catch(err => {
+          console.log("Unauthorized");
+          reject();
+        });
+    });
+  };
 }
 
 export function logout(){
-    let url = "/auth/logout"
-    server.post(url)
-        .then(({message})=>{
-            console.log(message)
-        })
-    return {
-        type: LOGOUT
-    }
+  logUserOut().then(({ message }) => {
+    console.log(message);
+  });
+  return {
+    type: LOGOUT
+  };
 }

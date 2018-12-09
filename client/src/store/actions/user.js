@@ -1,19 +1,10 @@
 import {
-  SEARCH_ROOMS,
   SUGGEST_INTEREST,
   SET_USER_INTEREST,
-  SET_USER_AVAILABILITY
+  SET_USER_AVAILABILITY,
 } from "../actionTypes";
-import { server } from "../../services/api";
-import axios from "axios";
+import { get, post } from "../../services/server";
 // TODO: Make this into an env variable
-
-function searchRoomsAction(searchedRooms) {
-  return {
-    type: SEARCH_ROOMS,
-    searchedRooms
-  };
-}
 
 function setUserInterest(interests) {
   return {
@@ -22,27 +13,12 @@ function setUserInterest(interests) {
   };
 }
 
-export function searchRooms(query) {
-  return dispatch => {
-    let url = "/room/" + query;
-    return server
-      .get(url)
-      .then(({ roomList }) => {
-        console.log(roomList);
-        if (roomList != undefined) {
-          dispatch(searchRoomsAction(roomList));
-        }
-      })
-      .catch(err => console.log(`Error in fetching searchRooms from ${url}`));
-  };
-}
 
 export function postInterests(interests) {
   return dispatch => {
     return new Promise((resolve, reject) => {
       let url = "/user/interest";
-      server
-        .post(url, { interests })
+      post(url, { interests })
         .then(({ interest }) => {
           console.log(interests);
           dispatch(setUserInterest(interest));
@@ -88,8 +64,7 @@ export function postAvailablity(availability) {
   return dispatch => {
     return new Promise((resolve, reject) => {
       let url = "/user/availability";
-      server
-        .post(url, { availability })
+      post(url, { availability })
         .then(data => {
           let avail = data.avail;
           dispatch(setUserAvailability(avail));

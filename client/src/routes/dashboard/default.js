@@ -17,8 +17,8 @@ class Default extends Component{
     render(){
         return (
             <div>
-                {this.props.username && 
-                    <Headline firstName={this.props.username} eventToday={{name: "Cross Country", time: "4:00 PM"}} />
+                {this.props.firstname && 
+                    <Headline firstName={this.props.firstname} eventToday={{name: "Cross Country", time: "4:00 PM"}} />
                 }
                 <SearchForm />
                 <SearchedRoomsList />
@@ -29,7 +29,7 @@ class Default extends Component{
 
 function mapStateToProps(reduxState){
     return{
-        username: reduxState.user.userData.username
+        firstname: reduxState.user.userData.firstname
     }
 }
 
