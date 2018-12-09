@@ -70,7 +70,10 @@ Router.route('/')
                         res.json(data)
                     })
                 })
-                .catch((err) => {res.status(401).json(err.message)})
+                .catch((err) => {
+                    res.status(401).json(err)
+                    console.log(err)
+                })
             }
             else res.status(401).json(err.message)
         })
@@ -254,16 +257,22 @@ Router.route('/:roomId')
 
 Router.route('/join/:roomId')
     .get(function(req, res, next){
+        // console.log(`called join`)
         isAuthenticated(req, res, function(user, err){
             if(user){
                 findById(req.params.roomId)
                 .then((room) => {
+                  if(isUserInRoom(room, user.id) != 0){
+                      res.status(200).json(room)
+                  }
                   if (room.roomstatus == 'OPEN'){
                     addUser(room, user)
                     .then((data) => {res.json(data)})
                     .catch((err) => {res.status(401).json(err.message)})
                   }
-                  else res.status(401).json("Room is not Open")
+                  else{
+                       res.status(401).json("Room is not Open")
+                    }
                 })
                 .catch((err) => {res.status(401).json(err.message)})
             }

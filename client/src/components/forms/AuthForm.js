@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+import ReactLoading from 'react-loading';
 import { signupUser, loginUser } from "../../store/actions/auth";
 import { connect } from "react-redux";
+import LoadingPage from "../utils/loadingScreen";
 
 class AuthForm extends Component {
   constructor(props) {
@@ -140,7 +142,7 @@ class AuthForm extends Component {
               {buttonText}
             </button>
           ) : (
-            <div className="loader" />
+            <LoadingPage />
           )}
         </form>
       </div>

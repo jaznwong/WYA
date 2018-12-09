@@ -7,7 +7,7 @@ const Message = ({ username, message }) => {
   console.log("creating message comp");
   console.log(`${username} : ${message}`);
   return (
-    <ListGroupItem className="mb-2">{`${username}: ${message}`}</ListGroupItem>
+    <ListGroupItem className="mb-2 mx-2">{`${username}: ${message}`}</ListGroupItem>
   );
 };
 
@@ -70,10 +70,10 @@ class MessageList extends Component {
 
   render() {
     return (
-      <div>
+      <div className>
         <PerfectScrollbar>
-          <div className="position-static" style={{ height: "620px" }}>
-            <ListGroup className>{this.state.messageHistroy}</ListGroup>
+          <div className="position-static pt-2 border" style={{ height: "620px" }}>
+            <ListGroup>{this.state.messageHistroy}</ListGroup>
           </div>
         </PerfectScrollbar>
         <Input
