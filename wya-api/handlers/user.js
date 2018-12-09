@@ -43,6 +43,7 @@ let create = async function (params) {
         }
         
     }catch(error){
+        console.log(error)
         throw {message: error.message || `Unable to create user ${params.username}`}
     }
 }
@@ -72,7 +73,7 @@ let findByUsername = async function (username) {
             }
         });
     } catch (err) {
-        // console.log(err)
+        console.log(err)
         throw `error finding users with username ${username}`
     }
 };
