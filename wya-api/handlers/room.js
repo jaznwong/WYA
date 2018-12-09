@@ -1,7 +1,7 @@
 let {
     Room
 } = require('../models');
-
+const Sequelize = require('sequelize');
 /**
  * Find an Room on the database
  * @param {*} id - Room id
@@ -76,14 +76,13 @@ let deleteById = async function(roomId){
  */
 let findByRoomname = async function (roomname) {
     try {
-        return await Room.findOne({
+        return Room.findAll({
             where: {
-                roomname
-            }
-        });
+                roomname: {[Sequelize.Op.like] : `%${roomname}%`}}
+          })
     } catch (err) {
-        // console.log(err)
-        throw `error finding Rooms with Roomname ${Roomname}`
+        console.log(err)
+        throw `error finding Rooms with Roomname ${roomname}`
     }
 };
 
@@ -118,6 +117,7 @@ let isUserInRoom = async function (room, userId) {
 
 module.exports = {
     findById,
+    findByRoomname,
     getAll,
     create,
     deleteAll,

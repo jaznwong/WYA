@@ -9,7 +9,7 @@ const Room = ({ match }) => (
     <Switch>
         <PrivateRoute path={`${match.url}/create`} component={CreateRoom} />
         {/* TODO: Refractor to variable room id */}
-        <PrivateRoute path={`${match.url}/default`} component={RoomPage} />
+        <PrivateRoute path={`${match.url}/view/:roomID`} component={RoomPage} />
         <Redirect to="/error" />
     </Switch>
 );

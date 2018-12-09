@@ -76,6 +76,16 @@ Router.route('/')
         })
     })
 
+Router.route('/search/:query')
+    .get(function(req, res, next){
+        console.log(req.param.query)
+        findByRoomname(req.params.query)
+            .then((rooms)=>{
+                console.log(rooms)
+                res.status(200).json({rooms})
+            })
+    })
+
 Router.route('/:roomID')
     .get(function(req, res, next){
         isAuthenticated(req, res, function(user, err){
