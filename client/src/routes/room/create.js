@@ -1,90 +1,69 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { createRoom } from "../../store/actions/room";
+import { Row, Col, Form, Input, FormGroup, Label, Jumbotron, Button, Alert} from "reactstrap";
 
 class Room extends Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
+      error: "",
       name: "",
-      description: ""
+      description: "",
+      modal: false
     };
   }
 
-  handleChange(e) {
+  handleChange = (e) =>{
     this.setState({
       [e.target.name]: e.target.value
     });
   }
 
-  handleClick = e => {
+  handleSubmit = e => {
     e.preventDefault();
-    this.props.createRoom(this.state.name, this.state.description).catch(err => {
-      console.log(err);
+    this.props
+      .createRoom(this.state.name, this.state.description)
+      .then((res)=>{
+        console.log(res.data.id)
+        this.props.history.push(`/room/view/${res.data.id}`)
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    // console.log(this.state.name);
+  };
+
+  toggle = () => {
+    this.setState({
+      modal: !this.state.modal
     });
-    console.log(this.state.name);
   };
 
   render() {
     return (
-      <div className="text-center shadow">
-        <div
-          className="Jumbotron Jumbotron-fluid"
-          style={{ height: "150px", backgroundColor: "#ADD8E6" }}
-        >
-          <h1 className="display-4">Create a Room</h1>
-        </div>
-
-        <div
-          className="Jumbotron Jumbotron-fluid"
-          style={{ height: "500px", backgroundColor: "#ADD8E6" }}
-        >
-          <div className="container">
-            <form>
-              <div className="form-group">
-                <h3 style={{ color: "black" }}> Room Name: </h3>
-                <div
-                  style={{width: "50%", marginLeft: "25%" }}
-                >
-                  <input
-                    className="form-control"
-                    name="name"
-                    type="text"
-                    value={this.state.name}
-                    onChange={this.handleChange.bind(this)}
-                    placeholder="Your room name"
-                  />
-                </div>
-              </div>
-              <div className="form-group">
-                <h3 style={{ color: "black" }}> Description: </h3>
-                <div
-                  style={{width: "50%", marginLeft: "25%" }}
-                >
-                  <textarea
-                    className="form-control"
-                    name="description"
-                    rows="3"
-                    value={this.state.description}
-                    onChange={this.handleChange.bind(this)}
-                  />
-                  <br />
-                  <button
-                    type="button"
-                    class="btn btn-primary btn-lg"
-                    style={{ background: "black" }}
-                    onClick={this.handleClick.bind(this)}
-                  >
-                    Create Room
-                  </button>
-                  <br />
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+      <Row className="mt-5">
+        <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center shadow pt-4 bg-dark">
+          <Jumbotron style={{backgroundColor: "#ADD8E6"}} >
+            <h1 className="display-4">Create a Room</h1>
+          </Jumbotron>
+          <Jumbotron style={{backgroundColor: "#ADD8E6"}}>
+            {this.state.error && <Alert color="danger">{this.state.error}</Alert>}
+            <Form onSubmit={this.handleSubmit}>
+              <FormGroup>
+                <Label> Room Name </Label>
+                <Input className="px-3" name="name" onChange={this.handleChange} value={this.state.name} required/>
+              </FormGroup>
+              <FormGroup>
+                <Label> Room Description </Label>
+                <Input className="px-3" name="description" onChange={this.handleChange} value={this.state.description} required/>
+              </FormGroup>
+              <Button>Create!</Button>
+            </Form>
+          </Jumbotron>
+        </Col>
+      </Row>
     );
   }
 }

@@ -16,12 +16,8 @@ const EventInfo = function({
   cateogry,
   price,
   location,
-  description
+  rating
 }) {
-  let displayPrice = "";
-  for (let i = 0; i < price; i++) {
-    displayPrice += "$";
-  }
   return (
     <Card>
       <div className="mx-2 my-2">
@@ -34,13 +30,15 @@ const EventInfo = function({
             <CardText>
               {" "}
               <span className="font-weight-bold">Category: </span> {cateogry}
-              <CardText>
-                <span className="font-weight-bold">Price: </span> {displayPrice}
-              </CardText>
-              <CardText>
-                <span className="font-weight-bold"> Location: </span> {location}
-              </CardText>
-              <p className="my-2">{description}</p>
+            </CardText>
+            <CardText>
+              <span className="font-weight-bold">Price: </span> {price}
+            </CardText>
+            <CardText>
+              <span className="font-weight-bold"> Location: </span> {location}
+            </CardText>
+            <CardText>
+              <span className="font-weight-bold"> Rating: </span> {rating}
             </CardText>
           </div>
         </PerfectScrollbar>

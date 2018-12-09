@@ -1,15 +1,17 @@
 import {
   UPDATE_USERS_IN_ROOM,
   SET_ROOM_INFORMATION,
-  SET_ROOM_STATUS
+  SET_ROOM_STATUS,
+  SET_ROOM_SUGGESTION
 } from "../actionTypes";
 
 const initialState = {
   users: [],
+  suggestion: {},
   name: "",
   description: "",
   creatorID: "",
-  status: "",
+  state: "",
   votes: "",
   userVoted: false
 };
@@ -32,6 +34,11 @@ export default (state = initialState, action) => {
       return{
           ...state,
           state: action.status
+      }
+    case SET_ROOM_SUGGESTION:
+      return{
+          ...state,
+          suggestion: action.suggestion
       }
     default:
       return state;
