@@ -3,6 +3,7 @@ import Navbar from "./components/nav/Navbar";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { initiateUser } from "./store/actions/auth";
+import { connecToSocket } from "./store/actions/global";
 import Main from "./routes";
 
 class App extends Component {
@@ -23,6 +24,7 @@ class App extends Component {
         loading: false
       });
     });
+    this.props.connecToSocket()
   }
 
   render() {
@@ -44,6 +46,6 @@ class App extends Component {
 export default withRouter(
   connect(
     null,
-    { initiateUser }
+    { initiateUser, connecToSocket }
   )(App)
 );
