@@ -72,7 +72,7 @@ class MessageList extends Component {
     return (
       <div className>
         <PerfectScrollbar>
-          <div className="position-static pt-2 border" style={{ height: "620px" }}>
+          <div className="position-static border-left bg-transparent" style={{ height: "620px" }}>
             <ListGroup>{this.state.messageHistroy}</ListGroup>
           </div>
         </PerfectScrollbar>

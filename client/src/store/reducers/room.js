@@ -2,7 +2,8 @@ import {
   UPDATE_USERS_IN_ROOM,
   SET_ROOM_INFORMATION,
   SET_ROOM_STATUS,
-  SET_ROOM_SUGGESTION
+  SET_ROOM_SUGGESTION,
+  VOTE_FOR_OPTION
 } from "../actionTypes";
 
 const initialState = {
@@ -23,6 +24,11 @@ export default (state = initialState, action) => {
         ...state,
         users: action.users
       };
+    case VOTE_FOR_OPTION:
+      return {
+        ...state,
+        userVoted: action.userVoted
+      }
     case SET_ROOM_INFORMATION:
       return{
           ...state,

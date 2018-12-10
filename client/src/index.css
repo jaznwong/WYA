@@ -6,6 +6,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #F2F7F2
 }
 
 code {
@@ -15,4 +16,28 @@ code {
 
 #main {
   margin-top: 1rem;
+}
+
+.bgc-primary{
+  background-color: #443850
+}
+
+.bgc-dark{
+  background: #272932
+}
+
+.bgc-secondary{
+ background-color: #8E5572
+}
+
+.c-light{
+  color: #F2F7F2
+}
+
+.c-highlight{
+  color: #BCAA99
+}
+
+.c-primary{
+  color: #8E5572
 }
