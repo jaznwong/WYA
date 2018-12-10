@@ -2,19 +2,19 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-const RenderRoom = function({ id, roomname, description, createdAt, today }) {
+const RenderRoom = function({ id, roomname, description, createdAt }) {
   let createdDate = new Date(createdAt);
   return (
     <Link
       to={`/room/view/${id}`}
-      className="list-group-item list-group-item-action flex-column align-items-start"
+      className="list-group-item list-group-item-action flex-column align-items-start text-center shadow mb-2"
     >
       <div className="d-flex w-100 justify-content-between">
         <h5 className="mb-1">{roomname}</h5>
         <small>{`Created on ${createdDate.toDateString()}`}</small>
       </div>
       <p className="mb-1">{description}</p>
-      <small>Donec id elit non mi porta.</small>
+      <small>Room is current Open</small>
     </Link>
   );
 };

@@ -17,8 +17,8 @@ class SearchForm extends Component{
         return (
             <form className="form my-3">
                 <div className="row">
-                    <div className="col-10"><input type="text" className="form-control" id="searchRooms" placeholder="Search Room"/></div>
-                    <div className="col-2"><button type="submit" className="btn btn-light mb-2 btn-block" onClick={this.handleSearch.bind(this)}>Search</button></div>
+                    <div className="col-10"><input type="text" className="form-control shadow" id="searchRooms" placeholder="Search Room"/></div>
+                    <div className="col-2"><button type="submit" className="btn btn-light mb-2 btn-block shadow" onClick={this.handleSearch.bind(this)}>Search</button></div>
                 </div>
             </form>
         )

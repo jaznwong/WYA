@@ -11,20 +11,22 @@ import {
 import PerfectScrollbar from "react-perfect-scrollbar";
 
 const EventInfo = function({
+  vote,
   name,
   image_url,
   cateogry,
   price,
   location,
-  rating
+  rating,
+  url
 }) {
   return (
-    <Card>
+    <Card className="shadow">
       <div className="mx-2 my-2">
         <CardImg top width="100%" src={image_url} alt="Card image cap" />
       </div>
-      <CardBody>
-        <CardTitle>{name}</CardTitle>
+      <CardBody className="text-center">
+        <CardTitle className="pb-2">{name}</CardTitle>
         <PerfectScrollbar>
           <div className="position-static" style={{ height: "150px" }}>
             <CardText>
@@ -42,17 +44,37 @@ const EventInfo = function({
             </CardText>
           </div>
         </PerfectScrollbar>
-        <CardFooter>
-          <div className="row">
-            <Button className="btn btn-primary col ml-3 mr-5" color="success">
-              Yes!{" "}
-            </Button>
-            <Button className="btn btn-primary col mr-3 ml-5" color="danger">
-              No
-            </Button>
-          </div>
-        </CardFooter>
       </CardBody>
+      <CardFooter>
+        <div className="row">
+          <Button
+            className="btn btn-primary col ml-3 mr-2"
+            color="success"
+            onClick={() => {
+              vote(true);
+            }}
+          >
+            Yes!{" "}
+          </Button>
+          <a
+            className="btn btn-primary col ml-2 mr-2 text-light"
+            target="_blank"
+            color="info"
+            href={url}
+          >
+            More Info{" "}
+          </a>
+          <Button
+            className="btn btn-primary col mr-3 ml-2"
+            color="danger"
+            onClick={() => {
+              vote(false);
+            }}
+          >
+            No
+          </Button>
+        </div>
+      </CardFooter>
     </Card>
   );
 };

@@ -10,7 +10,8 @@ import EventInfo from "../../components/cards/EventInfo";
 import {
   initiateRoom,
   initiateVote,
-  updateUserList
+  updateUserList,
+  voteForSuggestion
 } from "../../store/actions/room";
 import MessageList from "../../components/lists/messageList";
 
@@ -79,11 +80,15 @@ class RoomPage extends Component {
       });
   };
 
+  voteSuggestion = (hasAccepted) =>{
+    this.props.voteForSuggestion(this.props.match.params.roomID, hasAccepted)
+  }
+
   render() {
     if (this.state.loading) return <LoadingPage />;
     return (
       <div>
-        <div className="shadow-lg text-center bg-light py-3 my-3">
+        <div className="border-bottom text-center border-secondary pb-2 my-2">
           <h1 className="display-4">{this.props.name}</h1>
           <p className="">{this.props.description}</p>
           {this.props.creatorID == this.props.self.id &&
@@ -97,10 +102,11 @@ class RoomPage extends Component {
           </Col>
           <Col className="col position-static">
             {/* name, image_url, cateogry, price, location */}
-            {this.props.state != "VOTING" ? (
+            {this.props.state != "VOTING" || this.props.userVoted ? (
               <MessageList socket={this.props.socket} />
             ) : (
               <EventInfo
+                vote={this.voteSuggestion}
                 name={this.props.suggestion.name}
                 image_url={this.props.suggestion.image_url}
                 cateogry={this.props.suggestion.categories[0].title}
@@ -109,6 +115,7 @@ class RoomPage extends Component {
                   this.props.suggestion.location.display_address[0]
                 }, ${this.props.suggestion.location.display_address[1]}`}
                 rating={this.props.suggestion.rating}
+                url={this.props.suggestion.url}
               />
             )}
           </Col>
@@ -128,5 +135,5 @@ function mapStateToProps(reduxState) {
 
 export default connect(
   mapStateToProps,
-  { initiateRoom, initiateVote, updateUserList }
+  { initiateRoom, initiateVote, updateUserList, voteForSuggestion }
 )(RoomPage);

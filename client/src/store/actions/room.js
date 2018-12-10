@@ -5,13 +5,16 @@ import {
   getRoomById,
   joinRoom,
   initiateVote as startVoting,
-  getSuggestionForRoom as getSuggestions
+  getSuggestionForRoom as getSuggestions,
+  vote as voteRoom,
+  getVotes as getRoomVotes
 } from "../../services/server/room";
 import {
   UPDATE_USERS_IN_ROOM,
   SET_ROOM_STATUS,
   SET_ROOM_INFORMATION,
-  SET_ROOM_SUGGESTION
+  SET_ROOM_SUGGESTION,
+  VOTE_FOR_OPTION
 } from "../actionTypes";
 
 export function createRoom(name, desc) {
@@ -54,6 +57,7 @@ export function initiateRoom(id) {
         promises.push(getRoomById(id));
         promises.push(dispatch(updateUserList(id)));
         promises.push(getRoomStatus(id))
+        promises.push(dispatch(getVotes(id)))
   
         Promise.all(promises).then((values)=>{
           dispatch(setRoomInfo(values[0]));
@@ -116,7 +120,7 @@ export function getSuggestionForRoom(id){
     return new Promise((resolve, reject)=>{
       getSuggestions(id)
         .then((suggestion)=>{
-          console.log(suggestion)
+          // console.log(suggestion)
           dispatch({
             type: SET_ROOM_SUGGESTION,
             suggestion
@@ -125,6 +129,42 @@ export function getSuggestionForRoom(id){
         }).catch((error)=>{
           reject(error)
         })
+    })
+  }
+}
+
+export function userVoted(hasVoted){
+  return {
+    type: VOTE_FOR_OPTION,
+    userVoted: hasVoted
+  }
+}
+
+export function getVotes(id){
+  return (dispatch, getState) =>{
+    return new Promise((resolve, reject)=>{
+      getRoomVotes(id).then((votes)=>{
+        console.log(votes)
+        for(let vote of votes){
+          console.log("vote " + Object.keys(vote))
+          if (vote.UserId == getState().user.userData.id){
+            dispatch(userVoted(true))
+            break
+          }
+        }
+        resolve(votes)
+      })
+    })
+  }
+}
+
+export function voteForSuggestion(id, hasAccepted){
+  return dispatch =>{
+    return new Promise((resolve, reject)=>{
+      voteRoom(id, hasAccepted).then(()=>{
+        dispatch(userVoted(true))
+        resolve()
+      })
     })
   }
 }
