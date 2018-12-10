@@ -15,7 +15,8 @@ let {
     findVotes,
     createVote,
     deleteAllVotes,
-    deleteVoteById
+    deleteVoteById,
+    canBeAccepted
 } = require('../handlers/vote')
 let isAuthenticated = require('../middlewares.js')
 let yelp = require('../services/yelp')
@@ -298,8 +299,9 @@ Router.route('/:roomId/initiate_vote')
                     console.log(yelp.yelp.search)
                     yelp.yelp.search('New York City', interest, 4)
                     .then((event) => {
+                      let suggestionIndex = Math.floor(Math.random() * event.length);
                       room.update({
-                        location: event[0],
+                        location: event[suggestionIndex],
                         roomstatus: 'VOTING'
                       })
                       .then((room) => {res.status(200).json(room)})
@@ -356,4 +358,60 @@ Router.route('/:roomId/votes')
         })
     })
 
+  Router.route('/:roomId/end_vote')
+      .post(function(req, res, next){
+          isAuthenticated(req, res, function(user, err){
+              if(user){
+                  findById(req.params.roomId)
+                  .then((room) => {
+                    if (room.creatorID == user.id && room.roomstatus == 'VOTING'){
+                      /*
+                      ..* post request
+                      ..* param is "accepted", which will be a type boolean
+                      ..* should check if everyone has voted or not or if the accepted percentage should reach 60%.
+                      ..* upon complete, room status should be changed to either vote or locked. The event should also be recorded in the database
+                      */
+                      let accepted = true;
+                      if (req.body.accepted == 'false') votedFor = false;
+                      if (accepted){
+                          room.getUsers()
+                          .then((users) => {
+                              canBeAccepted(room.id, users.length)
+                              .then((accepted) => {
+                                  if (accepted){
+                                      room.update({
+                                        roomstatus: 'FINALIZED'
+                                      })
+                                      res.json('Accepted!')
+                                  }
+                                  else res.json('Cannot Be Accepted')
+                              })
+                              .catch((err) => {res.status(401).json(err)})
+                          })
+                          .catch((err) => {res.status(401).json(err)})
+                      }
+                      else {
+                          let interest = 'Bars';
+                          if(user.interests != null && user.interests.length >=1 ) interest = user.interest[0];
+                          console.log(yelp.yelp.search)
+                          yelp.yelp.search('New York City', interest, 4)
+                          .then((event) => {
+                            let suggestionIndex = Math.floor(Math.random() * event.length);
+                            room.update({
+                              location: event[suggestionIndex],
+                              roomstatus: 'VOTING'
+                            })
+                            .then((room) => {res.status(200).json(room)})
+                            .catch((err) => {res.status(401).json(err)})
+                          })
+                          .catch((err) => {res.status(401).json("Room is cannot be set to voting")})
+                      }
+                    }
+                    else res.status(401).json("Room is cannot be set to voting")
+                  })
+                  .catch((err) => {res.status(401).json(err)})
+              }
+              else res.status(401).json(err.message)
+          })
+      })
 module.exports = Router
