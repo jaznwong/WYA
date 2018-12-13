@@ -6,7 +6,7 @@ const UserCard = function({ name }) {
     <Card className="text-center bg-transparent border-0">
       <CardImg className="rounded-circle"
         top
-        src="http://icons.iconarchive.com/icons/hopstarter/superhero-avatar/256/Avengers-War-Machine-icon.png"
+        src={`https://s3.amazonaws.com/wya-cnds/imgs/avatars/avatar-${Math.floor(Math.random()*9)}.png`}
       />
       <CardBody>
         <CardTitle>{name}</CardTitle>

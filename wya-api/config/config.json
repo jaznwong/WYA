@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "wya",
-    "password": "wya",
-    "database": "wya_dev",
-    "host": "localhost",
+    "username": "urrivsww",
+    "password": "gODkYD---hN6fMh9Sc15vWt2FNozUvpM",
+    "database": "urrivsww",
+    "host": "baasu.db.elephantsql.com",
     "dialect": "postgresql"
   },
   "test": {
